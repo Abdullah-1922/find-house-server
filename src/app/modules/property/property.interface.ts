@@ -62,6 +62,7 @@ export type TProperty = {
   ownedBy: Types.ObjectId;
   status: PropertyStatus;
   feedback: Types.ObjectId[];
+  comment: Types.ObjectId[];
   title: string;
   description: string;
   category: PropertyCategory;

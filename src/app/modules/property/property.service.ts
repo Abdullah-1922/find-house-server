@@ -87,8 +87,11 @@ const updateProperty = async (id: string, payload: Partial<TProperty>) => {
       updateData[key] = payload[key];
     }
   });
-
-  const result = await Property.findByIdAndUpdate(id, { $set: updateData }, { new: true });
+  const result = await Property.findByIdAndUpdate(
+    id,
+    { $set: updateData },
+    { new: true },
+  );
   return result;
 };
 

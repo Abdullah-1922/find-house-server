@@ -69,6 +69,7 @@ const propertySchema = new Schema<TProperty>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    comment: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     status: {
       type: String,
       enum: PropertyStatus,
