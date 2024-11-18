@@ -92,7 +92,7 @@ const registerSocialUser = async (
 const generateTokens = (user: any) => {
   const jwtPayload = {
     email: user?.email || "",
-    role: user.role,
+    role: "user",
     _id: user._id,
     socialId: user?.facebookId || user?.twitterId || "",
   };
@@ -131,7 +131,11 @@ const registerByEmail = async (payload: TAuth) => {
     auth: authData._id,
   });
 
+  const tokens = generateTokens(newUser);
+
   return {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
     user: newUser,
   };
 };

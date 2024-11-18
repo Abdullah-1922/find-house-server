@@ -20,11 +20,12 @@ app.use(
       "http://localhost:5000",
       "http://localhost:3001",
     ],
+    credentials: true,
   }),
 );
 app.use(cookieParser());
 // application routes
-app.use("/api/v1", router);
+app.use("/api/v2", router);
 
 app.get("/", (req, res) => {
   res.status(200).json({
