@@ -80,6 +80,7 @@ const propertySchema = new Schema<TProperty>(
     title: { type: String, required: true },
     description: { type: String, required: true },
     category: { type: String, enum: category, required: true },
+    floorPlanImage: { type: String },
     type: { type: String, enum: PropertyType, required: true },
     rooms: { type: Number, min: 1, max: 5, default: 1 },
     price: { type: Number, required: true },
