@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 
 export type PropertyStatus = "active" | "non-active";
 
-export type PropertyCategory = "residential" | "commercial";
+export type PropertyCategory = "rent" | "sell";
 
 export type PropertyType =
   | "house"
@@ -70,6 +70,7 @@ export type TProperty = {
   rooms: number;
   price: number;
   area: number;
+  floorPlanImage: string;
   images: string[];
   location: ILocation;
   extraInfo: IExtraInfo;
