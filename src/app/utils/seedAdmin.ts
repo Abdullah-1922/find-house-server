@@ -10,16 +10,15 @@ export const adminSeed = async () => {
   try {
     session.startTransaction();
 
-    const admin = await User.findOne(
-      {
-        role: USER_ROLE.admin,
-        email: config.admin_email,
-      },
+    // Check if admin exists in the Auth collection
+    const existingAuth = await Auth.findOne(
+      { email: config.admin_email },
       null,
       { session },
     );
 
-    if (!admin) {
+    if (!existingAuth) {
+      // Create the Auth document
       const newAuth = await Auth.create(
         [
           {
@@ -32,6 +31,7 @@ export const adminSeed = async () => {
         { session },
       );
 
+      // Create the User document
       await User.create(
         [
           {

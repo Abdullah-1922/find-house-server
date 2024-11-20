@@ -18,4 +18,12 @@ export default {
   admin_second_name: process.env.ADMIN_SECOND_NAME,
   admin_provider: process.env.ADMIN_PROVIDER,
   admin_image: process.env.ADMIN_IMAGE,
+  frontend_local_url: process.env.FRONTEND_LIVE_URL,
+  frontend_live_url: process.env.FRONTEND_LOCAL_URL,
+  backend_live_url: process.env.BACKEND_LIVE_URL,
+  backend_local_url: process.env.BACKEND_LOCAL_URL,
+  payment_verify_url: process.env.PAYMENT_VERIFY_URL,
+  aamarpay_url: process.env.AMARPAY_URL,
+  store_id: process.env.STORE_ID,
+  signature_key: process.env.SIGNATURE_KEY,
 };
