@@ -20,7 +20,9 @@ app.use(
       "http://localhost:5000",
       "http://localhost:3001",
     ],
-    credentials:true
+
+    credentials: true,
+
   }),
 );
 app.use(cookieParser());

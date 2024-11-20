@@ -66,6 +66,7 @@ const loginTwitterUser = catchAsync(async (req, res) => {
 // });
 const registerByEmail = catchAsync(async (req, res) => {
   const result = await AuthServices.registerByEmail(req.body);
+  console.log(result);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

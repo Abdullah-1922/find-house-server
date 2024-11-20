@@ -2,8 +2,8 @@ import express from "express";
 import validateRequest from "../../middlewares/validateRequest";
 import { UserController } from "./user.controller";
 import { updateUserValidationSchema } from "./user.validation";
-// import auth from "../../middlewares/auth";
-// import { USER_ROLE } from "./user.utils";
+import auth from "../../middlewares/auth";
+import { USER_ROLE } from "./user.utils";
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.get(
 
 router.get(
   "/:id",
-  // auth(USER_ROLE.admin, USER_ROLE.driver, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.user),
   UserController.findUserById,
 );
 
