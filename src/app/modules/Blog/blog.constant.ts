@@ -24,4 +24,4 @@ export const BlogCategory = [
     Name: "Beds",
   },
 ];
-export const BlogCategoryNames = BlogCategory.map(category => category.Name);
+export const BlogCategoryNames = BlogCategory.map((category) => category.Name);
