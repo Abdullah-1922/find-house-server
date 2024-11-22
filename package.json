@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts ",
-    "prod": "NODE_ENV=production node ./dist/server.js",
+    "prod": "node ./dist/server.js",
     "build": "tsc",
     "lint": "eslint src --ignore-path .eslintignore --ext .ts",
     "lint:fix": "npx eslint src --fix",
@@ -20,6 +20,7 @@
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.6",
+    "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -29,6 +30,7 @@
     "jsonwebtoken": "^9.0.2",
     "lint-staged": "^15.1.0",
     "mongoose": "^8.0.1",
+    "uuid": "^11.0.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
