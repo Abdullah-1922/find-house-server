@@ -86,6 +86,7 @@ const propertySchema = new Schema<TProperty>(
     price: { type: Number, required: true },
     area: { type: Number, required: true },
     images: [{ type: String }],
+    favoriteBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     location: { type: locationSchema, required: true },
     extraInfo: { type: extraInfoSchema, required: true },
     features: { type: [String], enum: Features, required: true },

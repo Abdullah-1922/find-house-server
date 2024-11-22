@@ -67,11 +67,41 @@ const deleteProperty = catchAsync(async (req, res) => {
   });
 });
 
-// Export all property controllers
+const addPropertyFavorite = catchAsync(async (req, res) => {
+  const { propertyId, userId } = req.body;
+  console.log("hello");
+  console.log(propertyId, userId);
+  const result = await PropertyServices.addPropertyFavorite(propertyId, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Property added to favorites successfully",
+    data: result,
+  });
+});
+
+const removePropertyFavorite = catchAsync(async (req, res) => {
+  const { propertyId, userId } = req.body;
+  const result = await PropertyServices.removePropertyFavorite(
+    propertyId,
+    userId,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Property removed from favorites successfully",
+    data: result,
+  });
+});
+
 export const PropertyControllers = {
   createProperty,
   getAllProperties,
   getSingleProperty,
   updateProperty,
   deleteProperty,
+  addPropertyFavorite,
+  removePropertyFavorite,
 };

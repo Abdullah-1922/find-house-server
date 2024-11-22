@@ -69,6 +69,7 @@ export type TProperty = {
   type: PropertyType;
   rooms: number;
   price: number;
+  favoriteBy: Types.ObjectId[];
   area: number;
   floorPlanImage: string;
   images: string[];

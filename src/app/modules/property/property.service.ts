@@ -110,10 +110,74 @@ const deleteProperty = async (id: string) => {
   return result;
 };
 
+const addPropertyFavorite = async (propertyId: string, userId: string) => {
+  if (
+    !mongoose.Types.ObjectId.isValid(propertyId) ||
+    !mongoose.Types.ObjectId.isValid(userId)
+  ) {
+    throw new AppError(400, "Invalid property ID or user ID format");
+  }
+
+  const property = await Property.findById(propertyId);
+  if (!property) {
+    throw new AppError(404, "Property not found");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  if (!property.favoriteBy.includes(user._id)) {
+    property.favoriteBy.push(user._id);
+    await property.save();
+  }
+
+  if (!user.favoriteProperties.includes(property._id)) {
+    user.favoriteProperties.push(property._id);
+    await user.save();
+  }
+
+  return property;
+};
+
+const removePropertyFavorite = async (propertyId: string, userId: string) => {
+  if (
+    !mongoose.Types.ObjectId.isValid(propertyId) ||
+    !mongoose.Types.ObjectId.isValid(userId)
+  ) {
+    throw new AppError(400, "Invalid property ID or user ID format");
+  }
+
+  const property = await Property.findById(propertyId);
+  if (!property) {
+    throw new AppError(404, "Property not found");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  property.favoriteBy = property.favoriteBy.filter(
+    (favoriteUserId) => !favoriteUserId.equals(user._id)
+  );
+  await property.save();
+
+  user.favoriteProperties = user.favoriteProperties.filter(
+    (favoritePropertyId) => !favoritePropertyId.equals(property._id)
+  );
+  await user.save();
+
+  return property;
+};
+
 export const PropertyServices = {
   createProperty,
   getAllProperties,
   getSingleProperty,
   updateProperty,
   deleteProperty,
+  addPropertyFavorite,
+  removePropertyFavorite
 };
