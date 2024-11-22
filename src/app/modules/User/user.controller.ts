@@ -51,9 +51,22 @@ const deleteUserById = catchAsync(async (req, res) => {
   });
 });
 
+const makeAgent = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await UserService.makeAgent(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User role updated to agent successfully",
+    data: result,
+  });
+});
+
 export const UserController = {
   findUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
+  makeAgent
 };

@@ -18,6 +18,7 @@ router.get(
   auth(USER_ROLE.admin, USER_ROLE.user),
   UserController.findUserById,
 );
+router.patch("/make-agent/:id", UserController.makeAgent);
 
 router.patch(
   "/:id",

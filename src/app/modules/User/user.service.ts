@@ -1,4 +1,6 @@
 import QueryBuilder from "../../builder/QueryBuilder";
+import AppError from "../../errors/AppError";
+import Auth from "../Auth/auth.model";
 
 import { UserSearchableFields } from "./user.constant";
 import { TUser } from "./user.interface";
@@ -36,10 +38,30 @@ const deleteUserById = async (userId: string) => {
   const result = await User.findByIdAndDelete(userId);
   return result;
 };
+const makeAgent = async (userId: string) => {
+  const result = await User.findByIdAndUpdate(
+    { _id: userId },
+    { role: "agent" },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+  if (!result) {
+    throw new AppError(404, "User not found");
+  }
+
+  if (result?.auth) {
+    await Auth.findByIdAndUpdate(result?.auth, { role: "agent" });
+  }
+
+  return result;
+};
 
 export const UserService = {
   findUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
+  makeAgent,
 };
