@@ -27,7 +27,35 @@ const getCommentForBlog = catchAsync(async (req, res) => {
   });
 });
 
+const updateBlogComment = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const updatedData = req.body;
+
+  const result = await CommentServices.updateComment(id, updatedData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Comment updated successfully",
+    data: result,
+  });
+});
+
+const deleteBlogComment = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  await CommentServices.deleteComment(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Comment deleted successfully",
+  });
+});
+
 export const BlogCommentControllers = {
   createBlogComment,
   getCommentForBlog,
+  updateBlogComment,
+  deleteBlogComment,
 };
