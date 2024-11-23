@@ -60,7 +60,9 @@ const getCommentForBlog = async (
     throw new AppError(404, "Invalid blog Id");
   }
   const blogComment = new QueryBuilder(
-    BlogComment.find({ blogId }).populate([{path:"userId",select:"firstName lastName image"}]),
+    BlogComment.find({ blogId }).populate([
+      { path: "userId", select: "firstName secondName lastName image" },
+    ]),
     query,
   )
     .search(["blogComment"])
