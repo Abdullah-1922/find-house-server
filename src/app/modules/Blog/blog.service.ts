@@ -13,18 +13,20 @@ const createBlog = async (payload: Partial<TBlog>) => {
   const res = await Blog.create(payload);
   return res;
 };
-const getAllBlog = async (query: Record<string, unknown>) => {
+
+const getAllBlog = async (query: Record<string, any>) => {
   const blogQuery = new QueryBuilder(Blog.find().populate("userId"), query)
     .search(["category", "title", "description"])
-    .filter()
     .sort()
-    .paginate()
-    .fields();
+    .fields()
+    .filter()
+    .paginate();
 
   const result = await blogQuery.modelQuery;
   const meta = await blogQuery.countTotal();
   return { result, meta };
 };
+
 const getAllSearchBlog = async (query: Record<string, unknown>) => {
   const blogQuery = new QueryBuilder(
     Blog.find().select(["title", "image", "createdAt"]),

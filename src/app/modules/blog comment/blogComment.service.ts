@@ -75,7 +75,57 @@ const getCommentForBlog = async (
   return { meta, result };
 };
 
+const updateComment = async (
+  commentId: string,
+  updatedData: Partial<TBlogComment>,
+) => {
+  const comment = await BlogComment.findById(commentId);
+
+  if (!comment) {
+    throw new AppError(httpStatus.NOT_FOUND, "Comment not found");
+  }
+
+  Object.assign(comment, updatedData); // Update the comment with new data
+  await comment.save(); // Save the updated comment
+
+  return comment;
+};
+
+const deleteComment = async (commentId: string) => {
+  const comment = await BlogComment.findById(commentId);
+
+  if (!comment) {
+    throw new AppError(httpStatus.NOT_FOUND, "Comment not found");
+  }
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    // Remove the comment
+    await BlogComment.findByIdAndDelete(commentId, { session });
+
+    // Remove the comment reference from the blog
+    await Blog.findByIdAndUpdate(
+      comment.blogId,
+      { $pull: { blogComment: commentId } },
+      { session },
+    );
+
+    await session.commitTransaction();
+    session.endSession();
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw new AppError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to delete the comment",
+    );
+  }
+};
+
 export const CommentServices = {
   createComment,
   getCommentForBlog,
+  updateComment,
+  deleteComment,
 };

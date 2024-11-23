@@ -22,9 +22,9 @@ const getAllReviewsByProduct = async (productId: string) => {
   if (!product) {
     throw new AppError(404, "Product not found");
   }
-  const reviews = await ProductReview.find({ product: productId }).populate([
-    { path: "userId", select: "name" },
-  ]);
+  const reviews = await ProductReview.find({ product: productId }).populate(
+    "userId",
+  );
   return reviews;
 };
 
