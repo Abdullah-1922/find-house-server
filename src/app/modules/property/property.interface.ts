@@ -72,6 +72,7 @@ export type TProperty = {
   favoriteBy: Types.ObjectId[];
   area: number;
   floorPlanImage: string;
+  videoUrl: string;
   images: string[];
   location: ILocation;
   extraInfo: IExtraInfo;
