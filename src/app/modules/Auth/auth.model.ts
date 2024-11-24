@@ -5,7 +5,7 @@ const authSchema = new Schema<TAuth>(
   {
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: ["user", "admin", "agent"],
       default: "user",
     },
     email: {

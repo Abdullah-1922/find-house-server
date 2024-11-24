@@ -28,6 +28,17 @@ router.get(
   PropertyControllers.getSingleProperty,
 );
 
+
+router.patch(
+  "/add-favorite",
+  //   auth(USER_ROLE.user), // Only user can update properties
+  PropertyControllers.addPropertyFavorite,
+);
+router.patch(
+  "/remove-favorite",
+  //   auth(USER_ROLE.user), // Only user can update properties
+  PropertyControllers.removePropertyFavorite,
+);
 router.patch(
   "/:id",
   //   auth(USER_ROLE.admin), // Only admins can update properties

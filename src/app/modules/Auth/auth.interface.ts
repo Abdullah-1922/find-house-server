@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export type TAuth = {
   _id: Types.ObjectId;
-  role: "user" | "admin";
+  role: "user" | "admin"| "agent";
   email?: string;
   password?: string;
   provider: "email" | "facebook" | "twitter";
