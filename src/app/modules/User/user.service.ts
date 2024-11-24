@@ -5,7 +5,10 @@ import { TUser } from "./user.interface";
 import { User } from "./user.model";
 
 const findUserById = async (userId: string) => {
-  return await User.findById(userId).populate("auth");
+  const result = await User.findOne({ auth: userId }).populate("auth");
+
+  console.log(result);
+  return result;
 };
 
 const getAllUsers = async (query: Record<string, unknown>) => {

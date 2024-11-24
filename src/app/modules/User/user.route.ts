@@ -15,7 +15,7 @@ router.get(
 
 router.get(
   "/:id",
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE?.agent),
   UserController.findUserById,
 );
 

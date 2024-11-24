@@ -5,6 +5,7 @@ import { UserService } from "./user.service";
 
 const findUserById = catchAsync(async (req, res) => {
   const { id } = req.params;
+  console.log(id);
   const result = await UserService.findUserById(id);
 
   sendResponse(res, {
