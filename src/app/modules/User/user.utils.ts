@@ -5,7 +5,7 @@ export const validateEmail = function (email: string) {
 };
 
 export const USER_ROLE = {
-
   user: "user",
   admin: "admin",
+  agent: "agent",
 } as const;

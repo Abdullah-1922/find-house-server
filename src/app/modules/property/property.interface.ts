@@ -71,6 +71,7 @@ export type TProperty = {
   price: number;
   area: number;
   floorPlanImage: string;
+  videoUrl: string;
   images: string[];
   location: ILocation;
   extraInfo: IExtraInfo;
