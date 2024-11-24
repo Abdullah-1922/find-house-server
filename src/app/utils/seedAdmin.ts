@@ -1,4 +1,5 @@
 import { startSession } from "mongoose";
+import bcryptjs from "bcryptjs"; // Import bcryptjs for hashing
 import config from "../config";
 import Auth from "../modules/Auth/auth.model";
 import { User } from "../modules/User/user.model";
@@ -18,12 +19,18 @@ export const adminSeed = async () => {
     );
 
     if (!existingAuth) {
+      // Hash the password
+      const hashedPassword = await bcryptjs.hash(
+        config.admin_password as string,
+        12,
+      );
+
       // Create the Auth document
       const newAuth = await Auth.create(
         [
           {
             email: config.admin_email,
-            password: config.admin_password,
+            password: hashedPassword, // Use the hashed password
             provider: config.admin_provider,
             role: USER_ROLE.admin,
           },
@@ -36,6 +43,7 @@ export const adminSeed = async () => {
         [
           {
             auth: newAuth[0]._id,
+            email: config.admin_email,
             firstName: config.admin_first_name,
             secondName: config.admin_second_name,
             image: config.admin_image,
