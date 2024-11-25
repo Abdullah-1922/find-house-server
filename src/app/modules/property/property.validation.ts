@@ -36,6 +36,8 @@ export const createPropertyValidationSchema = z.object({
     price: z.number().positive("Price must be a positive number"),
     area: z.number().positive("Area must be a positive number"),
     images: z.array(z.string()).optional(),
+    floorPlanImage: z.array(z.string()).optional(),
+    videoUrl: z.array(z.string()).optional(),
     location: locationValidationSchema,
     extraInfo: extraInfoValidationSchema,
     features: z
@@ -60,7 +62,6 @@ export const createPropertyValidationSchema = z.object({
 
 export const updatePropertyValidationSchema = z.object({
   body: z.object({
-   
     ownedBy: z.string().nonempty("Owner ID is required").optional(),
     status: z.enum(["active", "non-active"]).optional(),
     title: z.string().min(1, "Title is required").optional(),
@@ -73,6 +74,8 @@ export const updatePropertyValidationSchema = z.object({
     price: z.number().positive("Price must be a positive number").optional(),
     area: z.number().positive("Area must be a positive number").optional(),
     images: z.array(z.string()).optional(),
+    floorPlanImage: z.array(z.string()).optional(),
+    videoUrl: z.array(z.string()).optional(),
     location: locationValidationSchema.partial().optional(),
     extraInfo: extraInfoValidationSchema.partial().optional(),
     features: z
