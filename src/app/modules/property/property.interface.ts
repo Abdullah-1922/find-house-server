@@ -52,7 +52,6 @@ export interface IExtraInfo {
 
 export interface IContactInfo {
   name: string;
-  userName: string;
   phone?: string;
   email?: string;
 }
