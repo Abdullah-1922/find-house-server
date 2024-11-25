@@ -41,10 +41,11 @@ const deleteUserById = async (userId: string) => {
   const result = await User.findByIdAndDelete(userId);
   return result;
 };
-const makeAgent = async (userId: string) => {
+
+const updateRole = async (userId: string, role: "admin" | "agent" | "user") => {
   const result = await User.findByIdAndUpdate(
     { _id: userId },
-    { role: "agent" },
+    { role },
     {
       new: true,
       runValidators: true,
@@ -55,7 +56,7 @@ const makeAgent = async (userId: string) => {
   }
 
   if (result?.auth) {
-    await Auth.findByIdAndUpdate(result?.auth, { role: "agent" });
+    await Auth.findByIdAndUpdate(result?.auth, { role });
   }
 
   return result;
@@ -66,5 +67,5 @@ export const UserService = {
   getAllUsers,
   updateUserById,
   deleteUserById,
-  makeAgent,
+  updateRole,
 };

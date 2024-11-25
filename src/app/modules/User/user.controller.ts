@@ -52,9 +52,9 @@ const deleteUserById = catchAsync(async (req, res) => {
   });
 });
 
-const makeAgent = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const result = await UserService.makeAgent(id);
+const updateRole = catchAsync(async (req, res) => {
+  const { id, role } = req.params;
+  const result = await UserService.updateRole(id, role as "admin" | "agent" | "user");
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -69,5 +69,5 @@ export const UserController = {
   getAllUsers,
   updateUserById,
   deleteUserById,
-  makeAgent
+  updateRole
 };
