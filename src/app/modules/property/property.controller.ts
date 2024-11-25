@@ -6,7 +6,6 @@ import { PropertyServices } from "./property.service";
 // Controller to create a new property
 const createProperty = catchAsync(async (req, res) => {
   const result = await PropertyServices.createProperty(req.body);
-
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
@@ -69,8 +68,6 @@ const deleteProperty = catchAsync(async (req, res) => {
 
 const addPropertyFavorite = catchAsync(async (req, res) => {
   const { propertyId, userId } = req.body;
-  console.log("hello");
-  console.log(propertyId, userId);
   const result = await PropertyServices.addPropertyFavorite(propertyId, userId);
 
   sendResponse(res, {
