@@ -25,6 +25,7 @@ const productSchema = new mongoose.Schema(
         "At least one image is required",
       ],
     },
+    favoriteBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     price: {
       type: Number,
       required: true,

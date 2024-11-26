@@ -12,6 +12,7 @@ const userSchema = new Schema<TUser>(
     role: { type: String, enum: ["user", "admin", "agent"], default: "user" },
     location: { type: String, required: false, default: "N/A" },
     favoriteProperties: [{ type: Schema.Types.ObjectId, ref: "Property" }],
+    favoriteProducts: [{ type: Schema.Types.ObjectId, ref: "Product" }],
     paymentHistory: [{ type: Schema.Types.ObjectId, ref: "Payment" }],
     property: [{ type: Schema.Types.ObjectId, ref: "Property" }],
   },

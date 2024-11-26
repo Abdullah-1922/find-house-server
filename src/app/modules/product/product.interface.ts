@@ -5,6 +5,7 @@ export type TProduct = {
   description: string;
   category: "chair" | "table" | "sofa" | "bed" | "cloth";
   images: string[];
+  favoriteBy: Types.ObjectId[];
   rating: number;
   price: number;
   admin: Types.ObjectId;

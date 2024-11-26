@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import QueryBuilder from "../../builder/QueryBuilder";
 import AppError from "../../errors/AppError";
 
@@ -54,10 +55,74 @@ const deleteProduct = async (id: string) => {
   return product;
 };
 
+const addProductFavorite = async (productId: string, userId: string) => {
+  if (
+    !mongoose.Types.ObjectId.isValid(productId) ||
+    !mongoose.Types.ObjectId.isValid(userId)
+  ) {
+    throw new AppError(400, "Invalid product ID or user ID format");
+  }
+
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new AppError(404, "product not found");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  if (!product.favoriteBy.includes(user._id)) {
+    product.favoriteBy.push(user._id);
+    await product.save();
+  }
+
+  if (!user.favoriteProperties.includes(product._id)) {
+    user.favoriteProperties.push(product._id);
+    await user.save();
+  }
+
+  return product;
+};
+
+const removeProductFavorite = async (productId: string, userId: string) => {
+  if (
+    !mongoose.Types.ObjectId.isValid(productId) ||
+    !mongoose.Types.ObjectId.isValid(userId)
+  ) {
+    throw new AppError(400, "Invalid product ID or user ID format");
+  }
+
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new AppError(404, "product not found");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  product.favoriteBy = product.favoriteBy.filter(
+    (favoriteUserId) => !favoriteUserId.equals(user._id),
+  );
+  await product.save();
+
+  user.favoriteProperties = user.favoriteProperties.filter(
+    (favoriteProductId) => !favoriteProductId.equals(product._id),
+  );
+  await user.save();
+
+  return product;
+};
+
 export const ProductServices = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
   deleteProduct,
+  addProductFavorite,
+  removeProductFavorite,
 };

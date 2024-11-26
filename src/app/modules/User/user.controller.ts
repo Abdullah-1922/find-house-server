@@ -5,7 +5,6 @@ import { UserService } from "./user.service";
 
 const findUserById = catchAsync(async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const result = await UserService.findUserById(id);
 
   sendResponse(res, {
@@ -30,6 +29,8 @@ const getAllUsers = catchAsync(async (req, res) => {
 
 const updateUserById = catchAsync(async (req, res) => {
   const { id } = req.params;
+
+  console.log("Request body received:", req.body); // Debug log
   const result = await UserService.updateUserById(id, req.body);
 
   sendResponse(res, {
@@ -54,7 +55,10 @@ const deleteUserById = catchAsync(async (req, res) => {
 
 const updateRole = catchAsync(async (req, res) => {
   const { id, role } = req.params;
-  const result = await UserService.updateRole(id, role as "admin" | "agent" | "user");
+  const result = await UserService.updateRole(
+    id,
+    role as "admin" | "agent" | "user",
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -69,5 +73,5 @@ export const UserController = {
   getAllUsers,
   updateUserById,
   deleteUserById,
-  updateRole
+  updateRole,
 };

@@ -41,10 +41,30 @@ export const registerEmailUserValidationSchema = z.object({
   }),
 });
 
+const forgotPasswordValidationSchema = z.object({
+  body: z.object({
+    email: z.string().email({ message: "Invalid email address" }),
+  }),
+});
+
+const changePasswordValidationSchema = z.object({
+  body: z.object({
+    token: z.string({ required_error: "Change token is required" }),
+    newPassword: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+    currentPassword: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+  }),
+});
+
 export const AuthValidation = {
   loginEmailValidationSchema,
   refreshTokenValidationSchema,
   registerEmailUserValidationSchema,
   loginTwitterValidationSchema,
   loginFacebookValidationSchema,
+  changePasswordValidationSchema,
+  forgotPasswordValidationSchema,
 };

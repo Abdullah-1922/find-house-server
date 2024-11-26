@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { ProductCategoryNames } from "./product.const";
 
-
 const CreateProductValidationSchema = z.object({
   body: z.object({
     name: z.string({ required_error: "Product name is required" }).min(3),

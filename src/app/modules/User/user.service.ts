@@ -29,9 +29,9 @@ const getAllUsers = async (query: Record<string, unknown>) => {
 };
 
 const updateUserById = async (userId: string, payload: Partial<TUser>) => {
-  const result = await User.findByIdAndUpdate({ _id: userId }, payload, {
+  console.log("service user data", payload);
+  const result = await User.findByIdAndUpdate(userId, payload, {
     new: true,
-    runValidators: true,
   });
   return result;
 };
