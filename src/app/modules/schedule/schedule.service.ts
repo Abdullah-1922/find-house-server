@@ -113,6 +113,7 @@ const deleteSchedule = async (id: string) => {
   }
   return schedule;
 };
+
 const getAgentSchedules = async (agentId: string, query: any) => {
   const scheduleQuery = new QueryBuilder(
     Schedule.find({ agent: agentId }).populate(["user", "agent", "property"]),
@@ -153,5 +154,5 @@ export const ScheduleServices = {
   updateIsAccepted,
   updateIsApproved,
   getAgentSchedules,
-  getUserSchedules
+  getUserSchedules,
 };
