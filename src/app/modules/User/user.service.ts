@@ -1,7 +1,6 @@
 import QueryBuilder from "../../builder/QueryBuilder";
 import AppError from "../../errors/AppError";
 import Auth from "../Auth/auth.model";
-
 import { UserSearchableFields } from "./user.constant";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
@@ -58,7 +57,6 @@ const updateRole = async (userId: string, role: "admin" | "agent" | "user") => {
   if (result?.auth) {
     await Auth.findByIdAndUpdate(result?.auth, { role });
   }
-
   return result;
 };
 
