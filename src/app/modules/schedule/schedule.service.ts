@@ -113,6 +113,36 @@ const deleteSchedule = async (id: string) => {
   }
   return schedule;
 };
+const getAgentSchedules = async (agentId: string, query: any) => {
+  const scheduleQuery = new QueryBuilder(
+    Schedule.find({ agent: agentId }).populate(["user", "agent", "property"]),
+    query,
+  )
+    .search(["isApproved", "isAccepted"])
+    .sort()
+    .fields()
+    .filter()
+    .paginate();
+
+  const result = await scheduleQuery.modelQuery;
+  const meta = await scheduleQuery.countTotal();
+  return { result, meta };
+};
+const getUserSchedules = async (userId: string, query: any) => {
+  const scheduleQuery = new QueryBuilder(
+    Schedule.find({ user: userId }).populate(["user", "agent", "property"]),
+    query,
+  )
+    .search(["isApproved", "isAccepted"])
+    .sort()
+    .fields()
+    .filter()
+    .paginate();
+
+  const result = await scheduleQuery.modelQuery;
+  const meta = await scheduleQuery.countTotal();
+  return { result, meta };
+};
 
 export const ScheduleServices = {
   createSchedule,
@@ -122,4 +152,6 @@ export const ScheduleServices = {
   deleteSchedule,
   updateIsAccepted,
   updateIsApproved,
+  getAgentSchedules,
+  getUserSchedules
 };

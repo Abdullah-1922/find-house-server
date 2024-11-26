@@ -46,37 +46,66 @@ const updateSchedule = catchAsync(async (req, res) => {
   });
 });
 
-
 const updateIsAccepted = catchAsync(async (req, res) => {
-    const scheduleId = req.params.scheduleId;
-    const { isAccepted } = req.body;
-  
-    const result = await ScheduleServices.updateIsAccepted(scheduleId, isAccepted);
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Schedule status (isAccepted) updated successfully",
-      data: result,
-    });
+  const scheduleId = req.params.scheduleId;
+  const { isAccepted } = req.body;
+
+  const result = await ScheduleServices.updateIsAccepted(
+    scheduleId,
+    isAccepted,
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Schedule status (isAccepted) updated successfully",
+    data: result,
   });
-  
-  const updateIsApproved = catchAsync(async (req, res) => {
-    const scheduleId = req.params.scheduleId;
-    const { isApproved } = req.body;
-  
-    const result = await ScheduleServices.updateIsApproved(scheduleId, isApproved);
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: "Schedule approval (isApproved) updated successfully",
-      data: result,
-    });
+});
+
+const updateIsApproved = catchAsync(async (req, res) => {
+  const scheduleId = req.params.scheduleId;
+  const { isApproved } = req.body;
+
+  const result = await ScheduleServices.updateIsApproved(
+    scheduleId,
+    isApproved,
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Schedule approval (isApproved) updated successfully",
+    data: result,
   });
-  
+});
 
-
-
-
+const getAgentSchedules = catchAsync(async (req, res) => {
+  const agentId = req.params.agentId;
+  const { result, meta } = await ScheduleServices.getAgentSchedules(
+    agentId,
+    req.query,
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Agent schedules retrieved successfully",
+    data: result,
+    meta,
+  });
+});
+const getUserSchedules = catchAsync(async (req, res) => {
+  const userId = req.params.userId;
+  const { result, meta } = await ScheduleServices.getAgentSchedules(
+    userId,
+    req.query,
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User schedules retrieved successfully",
+    data: result,
+    meta,
+  });
+});
 
 const deleteSchedule = catchAsync(async (req, res) => {
   const scheduleId = req.params.scheduleId;
@@ -97,4 +126,6 @@ export const ScheduleControllers = {
   deleteSchedule,
   updateIsAccepted,
   updateIsApproved,
+  getAgentSchedules,
+  getUserSchedules
 };
