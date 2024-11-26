@@ -19,19 +19,19 @@ router.get(
   auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE?.agent),
   UserController.findUserById,
 );
-router.patch("/update-role/:id/:role", auth(USER_ROLE.admin), UserController.updateRole);
 
 router.patch(
+  "/update-role/:id/:role",
+  auth(USER_ROLE.admin),
+  UserController.updateRole,
+);
+
+router.put(
   "/:id",
-  // auth(USER_ROLE.admin),
-  validateRequest(updateUserValidationSchema),
+  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE?.agent),
   UserController.updateUserById,
 );
 
-router.delete(
-  "/:id",
-  // auth(USER_ROLE.admin),
-  UserController.deleteUserById,
-);
+router.delete("/:id", auth(USER_ROLE.admin), UserController.deleteUserById);
 
 export const UserRoutes = router;
