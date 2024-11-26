@@ -25,6 +25,7 @@ const getAllReviewsByProduct = async (productId: string) => {
   const reviews = await ProductReview.find({ product: productId }).populate(
     "userId",
   );
+
   return reviews;
 };
 
