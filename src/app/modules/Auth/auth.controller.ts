@@ -2,11 +2,12 @@ import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { AuthServices } from "./auth.service";
+import AppError from "../../errors/AppError";
 
 const loginEmailUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "email");
 
-  const { refreshToken, accessToken, user } = result;
+  const { refreshToken, accessToken, user }: any = result;
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -22,7 +23,7 @@ const loginEmailUser = catchAsync(async (req, res) => {
 const loginFacebookUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "facebook");
 
-  const { refreshToken, accessToken, user } = result;
+  const { refreshToken, accessToken, user }: any = result;
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -39,7 +40,7 @@ const loginFacebookUser = catchAsync(async (req, res) => {
 const loginTwitterUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "twitter");
 
-  const { refreshToken, accessToken, user } = result;
+  const { refreshToken, accessToken, user }: any = result;
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -53,17 +54,6 @@ const loginTwitterUser = catchAsync(async (req, res) => {
   });
 });
 
-// const refreshToken = catchAsync(async (req, res) => {
-//   const { refreshToken } = req.cookies;
-//   const result = await AuthServices.refreshToken(refreshToken);
-
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Access token is retrieved successfully!',
-//     data: result,
-//   });
-// });
 const registerByEmail = catchAsync(async (req, res) => {
   const result = await AuthServices.registerByEmail(req.body);
   console.log(result);
@@ -76,10 +66,46 @@ const registerByEmail = catchAsync(async (req, res) => {
   });
 });
 
+// // Forgot Password Controller
+// const forgotPassword = catchAsync(async (req, res) => {
+//   const { email } = req.body;
+//   const result = await AuthServices.forgotPassword(email);
+
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: result.message,
+//   });
+// });
+
+// change Password Controller
+const changePassword = catchAsync(async (req, res) => {
+  const { token, currentPassword, newPassword } = req.body;
+
+  console.log(req.body);
+
+  if (!token || !currentPassword || !newPassword) {
+    throw new AppError(400, "All fields are required");
+  }
+
+  const result = await AuthServices.changePassword(
+    token,
+    currentPassword,
+    newPassword,
+  );
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: result.message,
+  });
+});
+
 export const AuthControllers = {
   loginEmailUser,
   loginFacebookUser,
-  // refreshToken,
   registerByEmail,
   loginTwitterUser,
+  // forgotPassword,
+  changePassword,
 };
