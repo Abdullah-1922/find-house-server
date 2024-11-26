@@ -1,10 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import bcryptjs from "bcryptjs";
+import crypto from "crypto";
 import { User } from "../User/user.model";
 import { TAuth } from "./auth.interface";
-import bcryptjs from "bcryptjs";
 import { createToken } from "./auth.utils"; // Utility to create JWT
 import Auth from "./auth.model";
 import AppError from "../../errors/AppError";
+import sendEmail from "../../utils/sendMail";
+import jwt from "jsonwebtoken";
 
 interface JwtPayload {
   email: string;
@@ -13,6 +15,7 @@ interface JwtPayload {
   socialId?: string; // Optional property
 }
 
+// Generate access and refresh tokens
 const generateTokens = (user: any) => {
   const jwtPayload: JwtPayload = {
     email: user?.email || "",
@@ -20,7 +23,6 @@ const generateTokens = (user: any) => {
     _id: user._id.toString(),
   };
 
-  // Add socialId to payload if it exists
   if (user?.facebookId || user?.twitterId) {
     jwtPayload.socialId = user.facebookId || user.twitterId;
   }
@@ -39,10 +41,9 @@ const generateTokens = (user: any) => {
   return { accessToken, refreshToken };
 };
 
+// Login user
 const loginUser = async (payload: TAuth, provider?: string) => {
   let user;
-
-  console.log("admin data=>", payload);
 
   if (provider === "email") {
     user = await Auth.findOne({ email: payload.email });
@@ -58,48 +59,11 @@ const loginUser = async (payload: TAuth, provider?: string) => {
 
     const tokens = generateTokens(user);
     user = await User.findOne({ email: payload.email }).populate("auth");
-    console.log(user);
-    return { ...tokens, user };
-  }
-
-  if (provider === "facebook") {
-    if (!payload.facebookId) throw new AppError(400, "Facebook ID is required");
-
-    user = await Auth.findOne({ facebookId: payload.facebookId });
-    if (!user) user = await registerSocialUser(payload, "facebook");
-    const tokens = generateTokens(user);
-    return { ...tokens, user };
-  }
-
-  if (provider === "twitter") {
-    if (!payload.twitterId) throw new AppError(400, "Twitter ID is required");
-
-    user = await Auth.findOne({ twitterId: payload.twitterId });
-    if (!user) user = await registerSocialUser(payload, "twitter");
-    const tokens = generateTokens(user);
     return { ...tokens, user };
   }
 };
 
-const registerSocialUser = async (
-  userData: TAuth,
-  provider: "facebook" | "twitter",
-) => {
-  const authData = await Auth.create({
-    ...userData,
-    provider,
-    [provider === "facebook" ? "facebookId" : "twitterId"]:
-      userData[provider === "facebook" ? "facebookId" : "twitterId"],
-  });
-
-  await User.create({
-    ...userData,
-    auth: authData._id,
-  });
-
-  return authData;
-};
-
+// Register user by email
 const registerByEmail = async (payload: TAuth) => {
   const existingUser = await Auth.findOne({ email: payload.email });
   if (existingUser) throw new AppError(400, "User already exists");
@@ -117,7 +81,78 @@ const registerByEmail = async (payload: TAuth) => {
   return { ...tokens, user: newUser };
 };
 
+// Forgot password
+// const forgotPassword = async (email: string) => {
+//   const user = await Auth.findOne({ email });
+//   if (!user) throw new AppError(404, "User not found");
+
+//   const changeToken = crypto.randomBytes(32).toString("hex");
+
+//   user.passwordchangeToken = crypto
+//     .createHash("sha256")
+//     .update(changeToken)
+//     .digest("hex");
+//   user.passwordchangeExpires = Date.now() + 10 * 60 * 1000;
+
+//   await user.save({ validateBeforeSave: false });
+
+//   const changeUrl = `${process.env.FRONTEND_URL}/change-password/${changeToken}`;
+//   const message = `You requested to change your password. Use this link: ${changeUrl}. This link is valid for 10 minutes.`;
+
+//   await sendEmail({
+//     to: email,
+//     subject: "Password change Request",
+//     text: message,
+//   });
+
+//   return { message: "Password change token sent to your email" };
+// };
+
+// change password
+const changePassword = async (
+  accessToken: string,
+  currentPassword: string,
+  newPassword: string,
+) => {
+  try {
+    // Decode the accessToken
+    const decoded = jwt.verify(
+      accessToken,
+      process.env.JWT_ACCESS_SECRET as string,
+    );
+    const userId = (decoded as any)._id;
+
+    // Find the user by ID
+    const user = await Auth.findById(userId);
+    if (!user) {
+      throw new AppError(404, "User not found");
+    }
+
+    // Compare the provided currentPassword with the hashed password in the database
+    const isPasswordMatch = await bcryptjs.compare(
+      currentPassword,
+      user.password as string,
+    );
+    if (!isPasswordMatch) {
+      throw new AppError(400, "Incorrect current password");
+    }
+
+    // Hash the new password and update the user's password
+    user.password = await bcryptjs.hash(newPassword, 12);
+    await user.save();
+
+    return { message: "Password changed successfully" };
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      throw new AppError(401, "Invalid or expired access token");
+    }
+    throw error; // Re-throw other errors
+  }
+};
+
 export const AuthServices = {
   loginUser,
   registerByEmail,
+  // forgotPassword,
+  changePassword,
 };
