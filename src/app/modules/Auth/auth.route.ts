@@ -29,11 +29,17 @@ router.post(
   AuthControllers.registerByEmail,
 );
 
-// router.post(
-//   "/forgot-password",
-//   validateRequest(AuthValidation.forgotPasswordValidationSchema),
-//   AuthControllers.forgotPassword,
-// );
+router.post(
+  "/forgot-password",
+  validateRequest(AuthValidation.forgotPasswordValidationSchema),
+  AuthControllers.forgotPassword,
+);
+
+router.post(
+  "/reset-password",
+  auth(USER_ROLE.admin, USER_ROLE.agent, USER_ROLE.user),
+  AuthControllers.resetPassword,
+);
 
 router.post(
   "/change-password",

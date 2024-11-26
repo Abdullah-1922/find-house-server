@@ -7,6 +7,8 @@ import Auth from "./auth.model";
 import AppError from "../../errors/AppError";
 import sendEmail from "../../utils/sendMail";
 import jwt from "jsonwebtoken";
+import config from "../../config";
+import httpStatus from "http-status";
 
 interface JwtPayload {
   email: string;
@@ -81,32 +83,65 @@ const registerByEmail = async (payload: TAuth) => {
   return { ...tokens, user: newUser };
 };
 
-// Forgot password
-// const forgotPassword = async (email: string) => {
-//   const user = await Auth.findOne({ email });
-//   if (!user) throw new AppError(404, "User not found");
+const forgotPassword = async (email: string) => {
+  const user = await Auth.findOne({ email });
+  if (!user) throw new AppError(404, "User not found");
 
-//   const changeToken = crypto.randomBytes(32).toString("hex");
+  // Generate a secure token
+  const tokens = generateTokens(user);
 
-//   user.passwordchangeToken = crypto
-//     .createHash("sha256")
-//     .update(changeToken)
-//     .digest("hex");
-//   user.passwordchangeExpires = Date.now() + 10 * 60 * 1000;
+  // Generate the reset URL
+  const resetUrl = `${config.frontend_local_url}/reset-password?email=${user?.email}&token=${tokens?.accessToken}`;
 
-//   await user.save({ validateBeforeSave: false });
+  // Send email
+  await sendEmail({
+    to: email,
+    subject: "Password Change Request",
+    resetLink: resetUrl,
+  });
 
-//   const changeUrl = `${process.env.FRONTEND_URL}/change-password/${changeToken}`;
-//   const message = `You requested to change your password. Use this link: ${changeUrl}. This link is valid for 10 minutes.`;
+  return { message: "Password reset token sent to your email" };
+};
 
-//   await sendEmail({
-//     to: email,
-//     subject: "Password change Request",
-//     text: message,
-//   });
+// reset password
+const resetPassword = async (
+  payload: { email: string; newPassword: string },
+  token: string,
+) => {
+  console.log(payload);
+  const user = await User.findOne({ email: payload?.email });
 
-//   return { message: "Password change token sent to your email" };
-// };
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "This user is not found!");
+  }
+
+  // Check if token is valid
+  const decoded = jwt.verify(token, config.jwt_access_secret as string) as {
+    _id: string;
+    role: string;
+  };
+
+  const isUserExists = await Auth.findById(decoded?._id);
+
+  if (!isUserExists) {
+    throw new AppError(httpStatus.FORBIDDEN, "This user is forbidden!");
+  }
+
+  const newHashPassword = await bcryptjs.hash(
+    payload.newPassword,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  const result = await Auth.findOneAndUpdate(
+    { _id: decoded._id, role: decoded.role },
+    {
+      password: newHashPassword,
+    },
+    { new: true },
+  );
+
+  return result;
+};
 
 // change password
 const changePassword = async (
@@ -153,6 +188,7 @@ const changePassword = async (
 export const AuthServices = {
   loginUser,
   registerByEmail,
-  // forgotPassword,
+  forgotPassword,
+  resetPassword,
   changePassword,
 };

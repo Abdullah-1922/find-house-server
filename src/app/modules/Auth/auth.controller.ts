@@ -66,17 +66,31 @@ const registerByEmail = catchAsync(async (req, res) => {
   });
 });
 
-// // Forgot Password Controller
-// const forgotPassword = catchAsync(async (req, res) => {
-//   const { email } = req.body;
-//   const result = await AuthServices.forgotPassword(email);
+// Forgot Password Controller
+const forgotPassword = catchAsync(async (req, res) => {
+  const { email } = req.body;
+  const result = await AuthServices.forgotPassword(email);
 
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: result.message,
-//   });
-// });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: result.message,
+  });
+});
+
+// Reset Password
+const resetPassword = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  console.log("token", token);
+  const result = await AuthServices.resetPassword(req.body, token as string);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Password reset successful!",
+    data: result,
+  });
+});
 
 // change Password Controller
 const changePassword = catchAsync(async (req, res) => {
@@ -106,6 +120,7 @@ export const AuthControllers = {
   loginFacebookUser,
   registerByEmail,
   loginTwitterUser,
-  // forgotPassword,
+  forgotPassword,
+  resetPassword,
   changePassword,
 };
