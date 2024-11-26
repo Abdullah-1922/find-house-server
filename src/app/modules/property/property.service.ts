@@ -160,16 +160,34 @@ const removePropertyFavorite = async (propertyId: string, userId: string) => {
   }
 
   property.favoriteBy = property.favoriteBy.filter(
-    (favoriteUserId) => !favoriteUserId.equals(user._id)
+    (favoriteUserId) => !favoriteUserId.equals(user._id),
   );
   await property.save();
 
   user.favoriteProperties = user.favoriteProperties.filter(
-    (favoritePropertyId) => !favoritePropertyId.equals(property._id)
+    (favoritePropertyId) => !favoritePropertyId.equals(property._id),
   );
   await user.save();
 
   return property;
+};
+
+const getMyFavoriteProperties = async (userId: string) => {
+  // Find the user by ID
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  // Check if the user has favorite properties
+  if (!user.favoriteProperties || user.favoriteProperties.length === 0) {
+    return [];
+  }
+  const favoriteProperties = await Property.find({
+    _id: { $in: user.favoriteProperties },
+  });
+
+  return favoriteProperties;
 };
 
 export const PropertyServices = {
@@ -179,5 +197,6 @@ export const PropertyServices = {
   updateProperty,
   deleteProperty,
   addPropertyFavorite,
-  removePropertyFavorite
+  removePropertyFavorite,
+  getMyFavoriteProperties,
 };

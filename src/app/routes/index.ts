@@ -6,7 +6,7 @@ import { PropertyRoutes } from "../modules/property/property.route";
 import { CommentRoutes } from "../modules/comment/comment.route";
 import { BlogRoutes } from "../modules/Blog/blog.route";
 import { BlogCommentRoutes } from "../modules/blog comment/blogComment.route";
-import { ProductRoutes } from "../modules/product/prduct.route";
+import { ProductRoutes } from "../modules/product/product.route";
 import { ProductReviewRoutes } from "../modules/product review/productReview.route";
 import { ScheduleRoutes } from "../modules/schedule/schedule.route";
 
