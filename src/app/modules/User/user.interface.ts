@@ -7,9 +7,10 @@ export type TUser = {
   email?: string;
   image?: string;
   phone?: string;
-  role: "admin" | "user"| "agent";
+  role: "admin" | "user" | "agent";
   location?: string;
   favoriteProperties: Types.ObjectId[];
+  favoriteProducts: Types.ObjectId[];
   paymentHistory: Types.ObjectId[];
   property: Types.ObjectId[];
   createdAt?: Date;

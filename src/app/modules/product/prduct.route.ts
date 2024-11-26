@@ -20,4 +20,15 @@ router.patch(
 );
 router.delete("/:id", ProductControllers.deleteProduct);
 
+router.patch(
+  "/add-favorite",
+  //   auth(USER_ROLE.user), // Only user can update properties
+  ProductControllers.addProductFavorite,
+);
+router.patch(
+  "/remove-favorite",
+  //   auth(USER_ROLE.user), // Only user can update properties
+  ProductControllers.removeProductFavorite,
+);
+
 export const ProductRoutes = router;

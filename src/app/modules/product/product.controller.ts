@@ -54,10 +54,36 @@ const deleteProduct = catchAsync(async (req, res) => {
   });
 });
 
+const addProductFavorite = catchAsync(async (req, res) => {
+  const { productId, userId } = req.body;
+  const result = await ProductServices.addProductFavorite(productId, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Product added to favorites successfully",
+    data: result,
+  });
+});
+
+const removeProductFavorite = catchAsync(async (req, res) => {
+  const { productId, userId } = req.body;
+  const result = await ProductServices.removeProductFavorite(productId, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Product removed from favorites successfully",
+    data: result,
+  });
+});
+
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
   deleteProduct,
+  addProductFavorite,
+  removeProductFavorite,
 };
