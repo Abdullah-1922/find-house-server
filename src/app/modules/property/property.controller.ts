@@ -93,6 +93,18 @@ const removePropertyFavorite = catchAsync(async (req, res) => {
   });
 });
 
+const getMyFavoriteProperties = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const result = await PropertyServices.getMyFavoriteProperties(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Favorites properties retrieved successfully",
+    data: result,
+  });
+});
+
 export const PropertyControllers = {
   createProperty,
   getAllProperties,
@@ -101,4 +113,5 @@ export const PropertyControllers = {
   deleteProperty,
   addPropertyFavorite,
   removePropertyFavorite,
+  getMyFavoriteProperties,
 };

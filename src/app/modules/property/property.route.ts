@@ -28,7 +28,6 @@ router.get(
   PropertyControllers.getSingleProperty,
 );
 
-
 router.patch(
   "/add-favorite",
   //   auth(USER_ROLE.user), // Only user can update properties
@@ -50,6 +49,11 @@ router.delete(
   "/:id",
   //   auth(USER_ROLE.admin), // Only admins can delete properties
   PropertyControllers.deleteProperty,
+);
+
+router.get(
+  "/my-favorite-properties/:userId",
+  PropertyControllers.getMyFavoriteProperties,
 );
 
 export const PropertyRoutes = router;

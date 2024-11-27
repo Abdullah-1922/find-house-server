@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { ProductServices } from "./product.service";
+import AppError from "../../errors/AppError";
 
 const createProduct = catchAsync(async (req, res) => {
   const result = await ProductServices.createProduct(req.body);
@@ -62,18 +63,32 @@ const addProductFavorite = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Product added to favorites successfully",
-    data: result,
+    // data: result,
   });
 });
 
 const removeProductFavorite = catchAsync(async (req, res) => {
   const { productId, userId } = req.body;
+
   const result = await ProductServices.removeProductFavorite(productId, userId);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Product removed from favorites successfully",
+    data: result,
+  });
+});
+
+const getMyFavoriteProducts = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  const result = await ProductServices.getMyFavoriteProducts(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Favorites products retrieved successfully",
     data: result,
   });
 });
@@ -86,4 +101,5 @@ export const ProductControllers = {
   deleteProduct,
   addProductFavorite,
   removeProductFavorite,
+  getMyFavoriteProducts,
 };

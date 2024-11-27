@@ -12,23 +12,32 @@ router.post(
 );
 
 router.get("/", ProductControllers.getAllProducts);
+
 router.get("/:id", ProductControllers.getProductById);
-router.patch(
-  "/:id",
-  validateRequest(ProductValidation.UpdateProductValidationSchema),
-  ProductControllers.updateProduct,
-);
-router.delete("/:id", ProductControllers.deleteProduct);
 
 router.patch(
   "/add-favorite",
   //   auth(USER_ROLE.user), // Only user can update properties
   ProductControllers.addProductFavorite,
 );
+
 router.patch(
   "/remove-favorite",
   //   auth(USER_ROLE.user), // Only user can update properties
   ProductControllers.removeProductFavorite,
+);
+
+router.patch(
+  "/:id",
+  validateRequest(ProductValidation.UpdateProductValidationSchema),
+  ProductControllers.updateProduct,
+);
+
+router.delete("/:id", ProductControllers.deleteProduct);
+
+router.get(
+  "/add-bookmark-product/:userId",
+  ProductControllers.getMyFavoriteProducts,
 );
 
 export const ProductRoutes = router;

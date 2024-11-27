@@ -16,7 +16,10 @@ const createProduct = async (payload: TProduct) => {
 };
 
 const getAllProducts = async (query: Record<string, unknown>) => {
-  const productQuery = new QueryBuilder(Product.find().populate("admin"), query)
+  const productQuery = new QueryBuilder(
+    Product.find().populate("admin").populate("review"),
+    query,
+  )
     .search(["name", "description", "category"])
     .filter()
     .sort()
@@ -56,16 +59,18 @@ const deleteProduct = async (id: string) => {
 };
 
 const addProductFavorite = async (productId: string, userId: string) => {
-  if (
-    !mongoose.Types.ObjectId.isValid(productId) ||
-    !mongoose.Types.ObjectId.isValid(userId)
-  ) {
-    throw new AppError(400, "Invalid product ID or user ID format");
+  console.log(productId, userId);
+  // Validate productId and userId
+  if (!mongoose.Types.ObjectId.isValid(productId)) {
+    throw new AppError(400, "Invalid product ID format");
+  }
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    throw new AppError(400, "Invalid user ID format");
   }
 
   const product = await Product.findById(productId);
   if (!product) {
-    throw new AppError(404, "product not found");
+    throw new AppError(404, "Product not found");
   }
 
   const user = await User.findById(userId);
@@ -73,13 +78,14 @@ const addProductFavorite = async (productId: string, userId: string) => {
     throw new AppError(404, "User not found");
   }
 
+  // Add product to user's favorites if not already present
   if (!product.favoriteBy.includes(user._id)) {
     product.favoriteBy.push(user._id);
     await product.save();
   }
 
-  if (!user.favoriteProperties.includes(product._id)) {
-    user.favoriteProperties.push(product._id);
+  if (!user.favoriteProducts.includes(product._id)) {
+    user.favoriteProducts.push(product._id);
     await user.save();
   }
 
@@ -87,16 +93,18 @@ const addProductFavorite = async (productId: string, userId: string) => {
 };
 
 const removeProductFavorite = async (productId: string, userId: string) => {
-  if (
-    !mongoose.Types.ObjectId.isValid(productId) ||
-    !mongoose.Types.ObjectId.isValid(userId)
-  ) {
-    throw new AppError(400, "Invalid product ID or user ID format");
+  // Validate IDs
+  if (!mongoose.Types.ObjectId.isValid(productId)) {
+    throw new AppError(400, "Invalid product ID format");
+  }
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    throw new AppError(400, "Invalid user ID format");
   }
 
+  // Find product and user
   const product = await Product.findById(productId);
   if (!product) {
-    throw new AppError(404, "product not found");
+    throw new AppError(404, "Product not found");
   }
 
   const user = await User.findById(userId);
@@ -104,17 +112,32 @@ const removeProductFavorite = async (productId: string, userId: string) => {
     throw new AppError(404, "User not found");
   }
 
+  // Remove product from user's favorites and user from product's favorites
   product.favoriteBy = product.favoriteBy.filter(
     (favoriteUserId) => !favoriteUserId.equals(user._id),
   );
   await product.save();
 
-  user.favoriteProperties = user.favoriteProperties.filter(
+  user.favoriteProducts = user.favoriteProducts.filter(
     (favoriteProductId) => !favoriteProductId.equals(product._id),
   );
   await user.save();
 
   return product;
+};
+
+const getMyFavoriteProducts = async (userId: string) => {
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    throw new AppError(400, "Invalid user ID format");
+  }
+
+  // Find user and populate favorite products
+  const user = await User.findById(userId).populate("favoriteProducts");
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  return user.favoriteProducts;
 };
 
 export const ProductServices = {
@@ -125,4 +148,5 @@ export const ProductServices = {
   deleteProduct,
   addProductFavorite,
   removeProductFavorite,
+  getMyFavoriteProducts,
 };
