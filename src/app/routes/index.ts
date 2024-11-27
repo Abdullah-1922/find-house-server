@@ -9,6 +9,7 @@ import { BlogCommentRoutes } from "../modules/blog comment/blogComment.route";
 import { ProductRoutes } from "../modules/product/product.route";
 import { ProductReviewRoutes } from "../modules/product review/productReview.route";
 import { ScheduleRoutes } from "../modules/schedule/schedule.route";
+import { InquiryRoutes } from "../modules/inquiry/inquiry.router";
 
 type TModuleRoutes = {
   path: string;
@@ -49,6 +50,10 @@ const moduleRoutes: TModuleRoutes[] = [
   {
     path: "/schedule",
     route: ScheduleRoutes,
+  },
+  {
+    path: "/inquiry",
+    route: InquiryRoutes,
   },
   {
     path: "/blog",
