@@ -2,6 +2,7 @@ import { ProductReview } from "./productReview.model";
 import { TProductReview } from "./productReview.interface";
 import AppError from "../../errors/AppError";
 import { Product } from "../product/product.model";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 const createReview = async (payload: Partial<TProductReview>) => {
   const product = await Product.findById(payload.product);
@@ -17,16 +18,28 @@ const createReview = async (payload: Partial<TProductReview>) => {
   return review;
 };
 
-const getAllReviewsByProduct = async (productId: string) => {
+const getAllReviewsByProduct = async (
+  query: Record<string, unknown>,
+  productId: string,
+) => {
   const product = await Product.findById(productId);
   if (!product) {
     throw new AppError(404, "Product not found");
   }
-  const reviews = await ProductReview.find({ product: productId }).populate(
-    "userId",
-  );
 
-  return reviews;
+  const reviewQuery = new QueryBuilder(
+    ProductReview.find({ product: productId }).populate("userId"),
+    query,
+  )
+    .search(["review", "rating"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await reviewQuery.modelQuery;
+  const meta = await reviewQuery.countTotal();
+  return { data: result, meta };
 };
 
 const updateReview = async (
