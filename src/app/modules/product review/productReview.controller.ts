@@ -15,12 +15,16 @@ const createReview = catchAsync(async (req, res) => {
 
 const getAllReviewsByProduct = catchAsync(async (req, res) => {
   const { productId } = req.params;
-  const result = await ProductReviewServices.getAllReviewsByProduct(productId);
+  const result = await ProductReviewServices.getAllReviewsByProduct(
+    req.query,
+    productId,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Reviews retrieved successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 
@@ -37,7 +41,7 @@ const updateReview = catchAsync(async (req, res) => {
 
 const deleteReview = catchAsync(async (req, res) => {
   const { reviewId } = req.params;
- const result = await ProductReviewServices.deleteReview(reviewId);
+  const result = await ProductReviewServices.deleteReview(reviewId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
