@@ -68,10 +68,27 @@ const updateRole = catchAsync(async (req, res) => {
   });
 });
 
+const getRoleBasedUser = catchAsync(async (req, res) => {
+  const { role } = req.params;
+  const result = await UserService.getRoleBasedUser(
+    role as "admin" | "agent" | "user",
+    req.query,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `${role} data retrieved successfully`,
+    meta: result.meta,
+    data: result.data,
+  });
+});
+
 export const UserController = {
   findUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
   updateRole,
+  getRoleBasedUser,
 };

@@ -31,6 +31,11 @@ const getAllProducts = async (query: Record<string, unknown>) => {
   return { result, meta };
 };
 
+const getAllProductsForAdmin = async () => {
+  const result = await Product.find().populate("admin").populate("review");
+  return result;
+};
+
 const getProductById = async (id: string) => {
   const product = await Product.findById(id).populate("admin");
   if (!product) {
@@ -143,6 +148,7 @@ const getMyFavoriteProducts = async (userId: string) => {
 export const ProductServices = {
   createProduct,
   getAllProducts,
+  getAllProductsForAdmin,
   getProductById,
   updateProduct,
   deleteProduct,

@@ -25,6 +25,16 @@ const getAllProducts = catchAsync(async (req, res) => {
   });
 });
 
+const getAllProductsForAdmin = catchAsync(async (req, res) => {
+  const result = await ProductServices.getAllProductsForAdmin();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Products retrieved successfully",
+    data: result,
+  });
+});
+
 const getProductById = catchAsync(async (req, res) => {
   const result = await ProductServices.getProductById(req.params.id);
   sendResponse(res, {
@@ -96,6 +106,7 @@ const getMyFavoriteProducts = catchAsync(async (req, res) => {
 export const ProductControllers = {
   createProduct,
   getAllProducts,
+  getAllProductsForAdmin,
   getProductById,
   updateProduct,
   deleteProduct,

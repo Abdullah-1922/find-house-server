@@ -12,6 +12,7 @@ router.post(
 );
 
 router.get("/", ProductControllers.getAllProducts);
+router.get("/admin", ProductControllers.getAllProductsForAdmin);
 
 router.get("/:id", ProductControllers.getProductById);
 

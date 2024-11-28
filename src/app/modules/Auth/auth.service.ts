@@ -21,7 +21,7 @@ interface JwtPayload {
 const generateTokens = (user: any) => {
   const jwtPayload: JwtPayload = {
     email: user?.email || "",
-    role: "user",
+    role: user?.role || "user",
     _id: user._id.toString(),
   };
 
