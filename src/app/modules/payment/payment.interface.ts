@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 
 export interface IPayment {
   customerId: Types.ObjectId;
+  products: Types.ObjectId[];
   name: string;
   email: string;
   phone: string;

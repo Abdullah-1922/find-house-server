@@ -7,6 +7,7 @@ import { initialPayment, verifyPayment } from "./payment.utils";
 import { Payment } from "./payment.model";
 import { IPayment } from "./payment.interface";
 import { format } from "date-fns";
+import { Product } from "../product/product.model";
 
 const createPayment = async (payload: Omit<IPayment, "transactionId">) => {
   const user = await User.findById(payload.customerId);
@@ -44,6 +45,27 @@ const createPayment = async (payload: Omit<IPayment, "transactionId">) => {
   };
 };
 
+const cashOnDeliveryPayment = async (payload: IPayment) => {
+  const user = await User.findById(payload?.customerId);
+
+  // Generate a transition ID
+  const generateTransactionId = (): string => {
+    const randomText = uuidv4().replace(/-/g, "");
+    const trimmedText = randomText.substring(0, 8);
+    return `FHTX-${trimmedText}`;
+  };
+
+  const transactionId = generateTransactionId();
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const result = await Payment.create({ ...payload, transactionId });
+  console.log("payment result", result);
+  return result;
+};
+
 const paymentConformationIntoDB = async (
   transactionId: string,
   status: string,
@@ -53,10 +75,49 @@ const paymentConformationIntoDB = async (
   let message = "Payment Failed. Please try again.";
   const paymentData = await Payment.findOne({ transactionId });
 
+  // remove this id on the user model
+
   if (status === "failed") {
     await Payment.findOneAndUpdate({ transactionId }, { status: "Failed" });
   }
   if (status === "success") {
+    const productIds = paymentData?.products;
+    console.log("productIds", productIds);
+
+    if (productIds && productIds.length > 0) {
+      // Step 1: Remove matching productIds from the user's favoriteProducts
+      const updatedUser = await User.findByIdAndUpdate(
+        paymentData.customerId,
+        {
+          $pull: {
+            favoriteProducts: { $in: productIds }, // Remove matching productIds
+          },
+        },
+        { new: true }, // Return the updated document
+      );
+
+      console.log("Updated User:", updatedUser);
+
+      // Step 2: Update each product's favoriteBy array
+      const updateProductPromises = productIds.map(async (productId) => {
+        return Product.findByIdAndUpdate(
+          productId,
+          {
+            $pull: {
+              favoriteBy: paymentData.customerId,
+            },
+          },
+          { new: true }, // Return the updated document
+        );
+      });
+
+      // Execute all update operations
+      const updatedProducts = await Promise.all(updateProductPromises);
+      console.log("Updated Products:", updatedProducts);
+    } else {
+      console.log("No products to remove from favoriteProducts.");
+    }
+
     const verifyResponse = await verifyPayment(transactionId);
 
     if (verifyResponse && verifyResponse.pay_status === "Successful") {
@@ -114,7 +175,7 @@ const paymentConformationIntoDB = async (
         </div>
         <div>
             <span>Attempted Amount:</span>
-            <span>৳${paymentData?.amount || "৳0.00"}</span>
+            <span>৳ ${paymentData?.amount || "৳ 0.00"}</span>
         </div>
       `;
 
@@ -218,14 +279,18 @@ const paymentConformationIntoDB = async (
 </html>`;
 };
 
-const getPaymentsData = async (query: Record<string, any>) => {
+const getMyPaymentsData = async (
+  query: Record<string, any>,
+  customerId: string,
+) => {
   const paymentQueryBuilder = new QueryBuilder(
-    Payment.find().populate("user"),
+    Payment.find({ customerId }).populate("customerId").populate("products"),
     query,
   )
     .filter()
     .sort()
-    .paginate();
+    .paginate()
+    .fields();
 
   const result = await paymentQueryBuilder.modelQuery;
   const meta = await paymentQueryBuilder.countTotal();
@@ -244,7 +309,8 @@ const getAllPaymentsDatForAnalytics = async () => {
 
 export const PaymentService = {
   createPayment,
+  cashOnDeliveryPayment,
   paymentConformationIntoDB,
-  getPaymentsData,
+  getMyPaymentsData,
   getAllPaymentsDatForAnalytics,
 };
