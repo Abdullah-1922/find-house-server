@@ -18,7 +18,7 @@ router.get(
 );
 
 router.get(
-  "/:role",
+  "/role-based-user/:role",
   auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE?.agent),
   UserController.getRoleBasedUser,
 );

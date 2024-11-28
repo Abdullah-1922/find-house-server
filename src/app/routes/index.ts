@@ -10,7 +10,7 @@ import { ProductRoutes } from "../modules/product/product.route";
 import { ProductReviewRoutes } from "../modules/product review/productReview.route";
 import { ScheduleRoutes } from "../modules/schedule/schedule.route";
 import { InquiryRoutes } from "../modules/inquiry/inquiry.router";
-import { PropertyPaymentRoutes } from "../modules/propertyPayment/propertyPayment.router";
+import { PaymentRoutes } from "../modules/payment/payment.routes";
 
 type TModuleRoutes = {
   path: string;
@@ -57,12 +57,12 @@ const moduleRoutes: TModuleRoutes[] = [
     route: InquiryRoutes,
   },
   {
-    path: "/property-payment",
-    route: PropertyPaymentRoutes,
-  },
-  {
     path: "/blog",
     route: BlogRoutes,
+  },
+  {
+    path: "/payments",
+    route: PaymentRoutes,
   },
 ];
 
