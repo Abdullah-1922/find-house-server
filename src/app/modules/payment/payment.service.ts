@@ -6,24 +6,20 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import { initialPayment, verifyPayment } from "./payment.utils";
 import { Payment } from "./payment.model";
 import { IPayment } from "./payment.interface";
-import Property from "../property/property.model";
 
-const subscriptionsIntoBD = async (
+const createPayment = async (
   payload: Omit<IPayment, "transitionId">,
-  userId: string,
 ) => {
-  const user = await User.findById(userId);
+  const user = await User.findById(payload.customerId);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User is not found");
   }
 
-  const post = await Property.find({ user: user._id });
-
   // Generate a transition ID
-  const transitionId = uuidv4();
-
-  const paymentData = { ...payload, transitionId };
+  const transactionId = uuidv4();
+  payload.status = "completed"
+  const paymentData = { ...payload, transactionId };
 
   // Make the initial payment request
   const paymentResponse = await initialPayment(paymentData);
@@ -33,7 +29,7 @@ const subscriptionsIntoBD = async (
   }
 
   // Save payment data to the database
-  const result = await Payment.create({ ...paymentData, user: userId });
+  const result = await Payment.create({ ...paymentData, customerId: payload.customerId });
 
   return {
     paymentResponse,
@@ -78,9 +74,8 @@ const paymentConformationIntoDB = async (
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Payment ${
-        paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1)
-      }</title>
+      <title>Payment ${paymentStatus.charAt(0).toUpperCase() + paymentStatus.slice(1)
+    }</title>
       <style>
           body {
               font-family: 'Arial', sans-serif;
@@ -116,9 +111,8 @@ const paymentConformationIntoDB = async (
           }
           .button {
               display: inline-block;
-              background-color: ${
-                paymentStatus === "success" ? "#FF69B4" : "#F25081"
-              };
+              background-color: ${paymentStatus === "success" ? "#FF69B4" : "#F25081"
+    };
               color: #ffffff;
               padding: 15px 30px;
               text-decoration: none;
@@ -127,19 +121,17 @@ const paymentConformationIntoDB = async (
               transition: background-color 0.3s ease;
           }
           .button:hover {
-              background-color: ${
-                paymentStatus === "success" ? "#FF85B2" : "#FF4588"
-              };
+              background-color: ${paymentStatus === "success" ? "#FF85B2" : "#FF4588"
+    };
           }
       </style>
   </head>
   <body>
       <div class="container">
-          <div class="success-icon"><img src="${
-            paymentStatus === "success"
-              ? "https://img.icons8.com/?size=100&id=123575&format=png&color=F25081"
-              : "https://img.icons8.com/?size=100&id=35879&format=png&color=F25081"
-          }" /></div>
+          <div class="success-icon"><img src="${paymentStatus === "success"
+      ? "https://img.icons8.com/?size=100&id=123575&format=png&color=F25081"
+      : "https://img.icons8.com/?size=100&id=35879&format=png&color=F25081"
+    }" /></div>
           <h1>${message}</h1>
           <a href="https://traveltipsdestinationcommunity.vercel.app/profile" class="button">Go Back</a>
       </div>
@@ -173,7 +165,7 @@ const getAllPaymentsDatForAnalytics = async () => {
 };
 
 export const PaymentService = {
-  subscriptionsIntoBD,
+  createPayment,
   paymentConformationIntoDB,
   getPaymentsData,
   getAllPaymentsDatForAnalytics,

@@ -3,17 +3,14 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { PaymentService } from "./payment.service";
 
-const subscriptions = catchAsync(async (req, res) => {
-  const { userId } = req.params;
-
-  const result = await PaymentService.subscriptionsIntoBD(
+const createPayment = catchAsync(async (req, res) => {
+  const result = await PaymentService.createPayment(
     req.body,
-    userId as string,
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Your subscriptions successful",
+    message: "Your payment completed successful",
     data: result,
   });
 });
@@ -55,7 +52,7 @@ const getAllPaymentsDatForAnalytics = catchAsync(async (req, res) => {
 });
 
 export const PaymentController = {
-  subscriptions,
+  createPayment,
   paymentConformation,
   getPaymentsData,
   getAllPaymentsDatForAnalytics,

@@ -15,11 +15,11 @@ export const initialPayment = async (paymentData: IPayment) => {
 
   try {
     const response = await axios.post(config.aamarpay_url!, {
-      store_id: config.store_id,
+      store_id: "aamarpaytest",
       signature_key: config.signature_key,
       tran_id: paymentData.transactionId,
-      success_url: `${backendUrl}/api/v1/payment/confirmation/${paymentData.buyerId}?transactionId=${paymentData.transactionId}&status=success`,
-      fail_url: `${backendUrl}/api/v1/payment/confirmation/${paymentData.buyerId}?transactionId=${paymentData.transactionId}&status=failed`,
+      success_url: `${backendUrl}/api/v1/payment/confirmation/${paymentData.customerId}?transactionId=${paymentData.transactionId}&status=success`,
+      fail_url: `${backendUrl}/api/v1/payment/confirmation/${paymentData.customerId}?transactionId=${paymentData.transactionId}&status=failed`,
       cancel_url: `${frontendUrl}`,
       amount: paymentData.amount,
       currency: paymentData.currency,

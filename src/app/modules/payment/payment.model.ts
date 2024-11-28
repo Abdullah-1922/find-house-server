@@ -1,21 +1,11 @@
-import mongoose, { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { IPayment } from "./payment.interface";
 
 const PaymentSchema = new Schema<IPayment>(
   {
-    sellerId: {
+    customerId: {
       type: Schema.Types.ObjectId,
       ref: "User", // Reference to the User model
-      required: true,
-    },
-    buyerId: {
-      type: Schema.Types.ObjectId,
-      ref: "User", // Reference to the User model
-      required: true,
-    },
-    propertyId: {
-      type: Schema.Types.ObjectId,
-      ref: "Property", // Reference to the Property model
       required: true,
     },
     name: {
@@ -54,9 +44,9 @@ const PaymentSchema = new Schema<IPayment>(
       type: String,
       required: true,
     },
-    field: {
+    status: {
       type: String,
-      enum: ["pending", "completed", "failed"],
+      enum: ["completed", "failed"],
       required: true,
     },
     gatewayName: {
@@ -65,6 +55,7 @@ const PaymentSchema = new Schema<IPayment>(
     },
     currency: {
       type: String,
+      enum: ["BDT", "USD"],
       required: true,
     },
     amount: {
