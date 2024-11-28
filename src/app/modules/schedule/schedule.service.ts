@@ -7,7 +7,7 @@ import { ISchedule } from "./schedule.interface";
 import { Schedule } from "./schedule.model";
 
 const createSchedule = async (payload: Partial<ISchedule>) => {
-  if (payload.agent == payload.user) {
+  if (payload.agent === payload.user) {
     throw new AppError(400, "You can't schedule a property with yourself");
   }
   const property = await Property.findById(payload.property);

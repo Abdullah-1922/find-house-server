@@ -19,10 +19,10 @@ app.use(
       "http://localhost:3000",
       "http://localhost:5000",
       "http://localhost:3001",
+      "https://wwwfind-house.vercel.app",
     ],
 
     credentials: true,
-
   }),
 );
 app.use(cookieParser());
