@@ -60,10 +60,33 @@ const updateRole = async (userId: string, role: "admin" | "agent" | "user") => {
   return result;
 };
 
+const getRoleBasedUser = async (
+  role: "admin" | "agent" | "user",
+  query: Record<string, unknown>,
+) => {
+  const userQuery = new QueryBuilder(
+    User.find({ role }).populate("auth"),
+    query,
+  )
+    .search(UserSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await userQuery.modelQuery;
+  const metaData = await userQuery.countTotal();
+  return {
+    meta: metaData,
+    data: result,
+  };
+};
+
 export const UserService = {
   findUserById,
   getAllUsers,
   updateUserById,
   deleteUserById,
   updateRole,
+  getRoleBasedUser,
 };
