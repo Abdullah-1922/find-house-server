@@ -2,7 +2,8 @@ import { z } from "zod";
 
 export const PaymentSchema = z.object({
   body: z.object({
-    customerId: z.string().min(1, "Name is required"),
+    customerId: z.string().min(1, "Customer id is required"),
+    products: z.array(z.string()).nonempty("Products array must not be empty"),
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email address"),
     phone: z.string().min(10, "Phone number must be at least 10 characters"),

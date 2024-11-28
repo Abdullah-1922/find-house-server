@@ -8,6 +8,13 @@ const PaymentSchema = new Schema<IPayment>(
       ref: "User", // Reference to the User model
       required: true,
     },
+    products: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+      },
+    ],
     name: {
       type: String,
       required: true,

@@ -7,19 +7,34 @@ import { PaymentSchema } from "./payment.validation";
 const router = Router();
 
 router.post(
-  "/",
+  "/online",
   validateRequest(PaymentSchema),
   PaymentController.createPayment,
 );
 
+router.post(
+  "/cash-on-delivery",
+  validateRequest(PaymentSchema),
+  PaymentController.cashOnDeliveryPayment,
+);
+
 router.post("/confirmation/:userId", PaymentController.paymentConformation);
 
-router.get("/", Auth(USER_ROLE.admin), PaymentController.getPaymentsData);
+router.get(
+  "/:userId",
+  Auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent),
+  PaymentController.getMyPaymentsData,
+);
+router.get(
+  "/",
+  Auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent),
+  PaymentController.getMyPaymentsData,
+);
 
 router.get(
   "/analytics",
-  Auth(USER_ROLE.admin),
-  PaymentController.getPaymentsData,
+  Auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent),
+  PaymentController.getMyPaymentsData,
 );
 
 export const PaymentRoutes = router;

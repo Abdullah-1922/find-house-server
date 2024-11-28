@@ -6,6 +6,8 @@ import validateRequest from "../../middlewares/validateRequest";
 
 import { PropertyControllers } from "./property.controller";
 import { PropertyValidations } from "./property.validation";
+import { USER_ROLE } from "../User/user.utils";
+import auth from "../../middlewares/auth";
 
 const router = express.Router();
 
@@ -18,13 +20,19 @@ router.post(
 
 router.get(
   "/",
-  //   auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.driver), // Accessible by admin, user, and driver
+  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent), // Accessible by admin, user, and agent
   PropertyControllers.getAllProperties,
 );
 
 router.get(
+  "/my-properties/:userId",
+  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent), // Accessible by admin, user, and agent
+  PropertyControllers.getMyAllProperties,
+);
+
+router.get(
   "/:id",
-  //   auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.driver), // Accessible by admin, user, and driver
+  //   auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent), // Accessible by admin, user, and agent
   PropertyControllers.getSingleProperty,
 );
 

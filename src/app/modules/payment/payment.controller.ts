@@ -13,6 +13,16 @@ const createPayment = catchAsync(async (req, res) => {
   });
 });
 
+const cashOnDeliveryPayment = catchAsync(async (req, res) => {
+  const result = await PaymentService.cashOnDeliveryPayment(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Your order successful",
+    data: result,
+  });
+});
+
 const paymentConformation = catchAsync(async (req, res) => {
   const { transactionId, status } = req.query;
   const { userId } = req.params;
@@ -26,8 +36,12 @@ const paymentConformation = catchAsync(async (req, res) => {
   res.send(result);
 });
 
-const getPaymentsData = catchAsync(async (req, res) => {
-  const { result, meta } = await PaymentService.getPaymentsData(req.query);
+const getMyPaymentsData = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const { result, meta } = await PaymentService.getMyPaymentsData(
+    req.query,
+    userId,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -51,7 +65,8 @@ const getAllPaymentsDatForAnalytics = catchAsync(async (req, res) => {
 
 export const PaymentController = {
   createPayment,
+  cashOnDeliveryPayment,
   paymentConformation,
-  getPaymentsData,
+  getMyPaymentsData,
   getAllPaymentsDatForAnalytics,
 };

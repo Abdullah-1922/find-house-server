@@ -45,6 +45,26 @@ const getAllProperties = async (query: Record<string, unknown>) => {
   return { result, meta };
 };
 
+// Get all properties with query filters
+const getMyAllProperties = async (
+  query: Record<string, unknown>,
+  userId: string,
+) => {
+  const propertyQuery = new QueryBuilder(
+    Property.find({ author: userId }).populate(["author", "ownedBy"]),
+    query,
+  )
+    .search(["title", "description", "category", "type"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await propertyQuery.modelQuery;
+  const meta = await propertyQuery.countTotal();
+  return { result, meta };
+};
+
 // Get a single property by ID
 const getSingleProperty = async (id: string) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -192,6 +212,7 @@ const getMyFavoriteProperties = async (userId: string) => {
 
 export const PropertyServices = {
   createProperty,
+  getMyAllProperties,
   getAllProperties,
   getSingleProperty,
   updateProperty,
