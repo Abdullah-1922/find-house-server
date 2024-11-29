@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { User } from "../User/user.model";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
@@ -69,7 +70,6 @@ const cashOnDeliveryPayment = async (payload: IPayment) => {
 const paymentConformationIntoDB = async (
   transactionId: string,
   status: string,
-  userId: string,
 ) => {
   let paymentStatus = "failed";
   let message = "Payment Failed. Please try again.";
@@ -159,9 +159,9 @@ const paymentConformationIntoDB = async (
         <div>
             <span>Date:</span>
             <span>${format(
-              new Date(paymentData?.createdAt as Date),
-              "dd MMM, yyyy",
-            )}</span>
+        new Date(paymentData?.createdAt as Date),
+        "dd MMM, yyyy",
+      )}</span>
         </div>
       `
       : `
@@ -365,11 +365,43 @@ const getMyPaymentsData = async (
   };
 };
 
+
 const getAllPaymentsDatForAnalytics = async () => {
   const result = await Payment.find().populate("user");
 
   return result;
 };
+
+const getAllPayments = async (
+  query: Record<string, any>,
+) => {
+  const paymentQueryBuilder = new QueryBuilder(
+    Payment.find().populate("customerId").populate("products"),
+    query,
+  )
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await paymentQueryBuilder.modelQuery;
+  const meta = await paymentQueryBuilder.countTotal();
+
+  return {
+    meta,
+    result,
+  };
+};
+
+const updatePaymentStatus = async (paymentId: string, status: string) => {
+  const result = await Payment.findByIdAndUpdate(
+    paymentId,
+    { status: status },
+    { new: true },
+  );
+  return result;
+};
+
 
 export const PaymentService = {
   createPayment,
@@ -378,4 +410,6 @@ export const PaymentService = {
   CasOnDeliveryStatusUpdate,
   getMyPaymentsData,
   getAllPaymentsDatForAnalytics,
+  getAllPayments,
+  updatePaymentStatus
 };
