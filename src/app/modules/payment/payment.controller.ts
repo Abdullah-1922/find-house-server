@@ -36,6 +36,22 @@ const paymentConformation = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const CasOnDeliveryStatusUpdate = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  const result = await PaymentService.CasOnDeliveryStatusUpdate(
+    req.body,
+    userId as string,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Cash on delivery status updated successfully",
+    data: result,
+  });
+});
+
 const getMyPaymentsData = catchAsync(async (req, res) => {
   const { userId } = req.params;
   const { result, meta } = await PaymentService.getMyPaymentsData(
@@ -67,6 +83,7 @@ export const PaymentController = {
   createPayment,
   cashOnDeliveryPayment,
   paymentConformation,
+  CasOnDeliveryStatusUpdate,
   getMyPaymentsData,
   getAllPaymentsDatForAnalytics,
 };

@@ -53,7 +53,7 @@ const PaymentSchema = new Schema<IPayment>(
     },
     status: {
       type: String,
-      enum: ["Pending", "Paidd", "Failed"],
+      enum: ["Pending", "Paid", "Failed", "Canceled"],
       default: "Pending",
     },
     gatewayName: {

@@ -17,6 +17,11 @@ router.post(
   validateRequest(PaymentSchema),
   PaymentController.cashOnDeliveryPayment,
 );
+router.post(
+  "/cash-on-delivery/:userId",
+  validateRequest(PaymentSchema),
+  PaymentController.CasOnDeliveryStatusUpdate,
+);
 
 router.post("/confirmation/:userId", PaymentController.paymentConformation);
 
