@@ -12,7 +12,7 @@ export interface IPayment {
   address: string;
   zip: string;
   transactionId: string;
-  status: "Pending" | "Paidd" | "Failed";
+  status: "Pending" | "Paid" | "Failed" | "Canceled";
   gatewayName: "Cash On Delivery" | "Online Payment";
   currency: "BDT" | "USD";
   amount: number;

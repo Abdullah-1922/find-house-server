@@ -279,6 +279,70 @@ const paymentConformationIntoDB = async (
 </html>`;
 };
 
+const CasOnDeliveryStatusUpdate = async (payload: IPayment, userId: string) => {
+  const user = await User.findById(userId);
+  let result;
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const paymentData = await Payment.findOne({
+    transactionId: payload.transactionId,
+  });
+  const productIds = paymentData?.products;
+  console.log("productIds", productIds);
+
+  if (payload.status === "Paid") {
+    if (productIds && productIds.length > 0) {
+      const updatedUser = await User.findByIdAndUpdate(
+        paymentData.customerId,
+        {
+          $pull: {
+            favoriteProducts: { $in: productIds }, // Remove matching productIds
+          },
+        },
+        { new: true }, // Return the updated document
+      );
+
+      console.log("Updated User:", updatedUser);
+
+      // Step 2: Update each product's favoriteBy array
+      const updateProductPromises = productIds.map(async (productId) => {
+        return Product.findByIdAndUpdate(
+          productId,
+          {
+            $pull: {
+              favoriteBy: paymentData.customerId,
+            },
+          },
+          { new: true }, // Return the updated document
+        );
+      });
+
+      // Execute all update operations
+      const updatedProducts = await Promise.all(updateProductPromises);
+      console.log("Updated Products:", updatedProducts);
+    } else {
+      console.log("No products to remove from favoriteProducts.");
+    }
+
+    result = await Payment.findOneAndUpdate(
+      { transactionId: payload.transactionId },
+      { status: "Paid" },
+      { new: true },
+    );
+  }
+
+  if (payload.status === "Canceled") {
+    result = await Payment.findOneAndUpdate(
+      { transactionId: payload.transactionId },
+      { status: "Canceled" },
+      { new: true },
+    );
+  }
+  return result;
+};
+
 const getMyPaymentsData = async (
   query: Record<string, any>,
   customerId: string,
@@ -311,6 +375,7 @@ export const PaymentService = {
   createPayment,
   cashOnDeliveryPayment,
   paymentConformationIntoDB,
+  CasOnDeliveryStatusUpdate,
   getMyPaymentsData,
   getAllPaymentsDatForAnalytics,
 };
