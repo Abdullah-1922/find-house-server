@@ -72,10 +72,47 @@ const deleteReview = async (reviewId: string) => {
 
   return review;
 };
+const getAllReviews=async(query:Record<string,unknown>)=>{
+  const reviewQuery = new QueryBuilder(
+    ProductReview.find().populate("userId"),
+    query,
+  )
+    .search(["review", "rating"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await reviewQuery.modelQuery;
+  const meta = await reviewQuery.countTotal();
+  return { data: result, meta };
+}
+const getAllReviewsByUser=async(query:Record<string,unknown>,userId:string)=>{
+  const reviewQuery = new QueryBuilder(
+    ProductReview.find({userId}).populate("userId"),
+    query,
+  )
+    .search(["review", "rating"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await reviewQuery.modelQuery;
+  const meta = await reviewQuery.countTotal();
+  return { data: result, meta };
+}
+
+
+
+
+
 
 export const ProductReviewServices = {
   createReview,
   getAllReviewsByProduct,
   updateReview,
   deleteReview,
+  getAllReviews,
+  getAllReviewsByUser
 };

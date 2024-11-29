@@ -39,6 +39,18 @@ const getSingleProperty = catchAsync(async (req, res) => {
     data: result,
   });
 });
+// Controller to get a My property by ID
+const getMyProperties = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const result = await PropertyServices.getMyProperties(userId, req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Property retrieved successfully (My Property)",
+    data: result,
+  });
+});
 
 // Controller to update a property by ID
 const updateProperty = catchAsync(async (req, res) => {
@@ -114,4 +126,5 @@ export const PropertyControllers = {
   addPropertyFavorite,
   removePropertyFavorite,
   getMyFavoriteProperties,
+  getMyProperties
 };

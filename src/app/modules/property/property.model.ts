@@ -20,7 +20,7 @@ const Features = [
   "Alarm",
   "Window Covering",
   "Refrigerator",
-  "TV Cable & WIFI",
+  "TV Cable & Wifi",
   "Microwave",
 ] as const;
 const ExtraInfoAge = [
