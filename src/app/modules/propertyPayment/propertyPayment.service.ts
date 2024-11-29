@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import QueryBuilder from "../../builder/QueryBuilder";
+import AppError from "../../errors/AppError";
 import Property from "../property/property.model";
 import { User } from "../User/user.model";
 import { TPropertyPayment } from "./propertyPayment.interface";
@@ -10,24 +11,24 @@ const createPayment = async (paymentData: TPropertyPayment) => {
     paymentData;
   const propertyInfo = await Property.findById(property);
   if (!propertyInfo) {
-    throw new Error("Property not found");
+    throw new AppError(404,"Property not found");
   }
   const userData = await User.findById(user);
   if (!userData) {
-    throw new Error("User not found");
+    throw new AppError(404,"User not found");
   }
 
   // Validation for conditional fields
   if (category === "sell" && !totalPrice) {
-    throw new Error("Total price is required for sell category");
+    throw new AppError(404,"Total price is required for sell category");
   }
   if (category === "rent" && (!monthlyRent || !leaseDuration)) {
-    throw new Error(
-      "Monthly rent and lease duration are required for rent category",
+    throw new AppError(
+      404,"Monthly rent and lease duration are required for rent category",
     );
   }
   if (propertyInfo.category !== category) {
-    throw new Error("Category does not match with property category");
+    throw new AppError(404,"Category does not match with property category");
   }
 
   const payment = await PropertyPayment.create(paymentData);
@@ -53,7 +54,7 @@ const getPayments = async (query: any) => {
 const getPaymentById = async (id: string) => {
   const payment = await PropertyPayment.findById(id).populate("property user");
   if (!payment) {
-    throw new Error("Payment not found");
+    throw new AppError(404,"Payment not found");
   }
   return payment;
 };
@@ -63,22 +64,22 @@ const updatePaymentPayment = async (
 ) => {
   const propertyPayment = await PropertyPayment.findById(id);
   if (!propertyPayment) {
-    throw new Error("Payment not found");
+    throw new AppError(404,"Payment not found");
   }
   if (paymentData.property) {
     const propertyData = await Property.findById(paymentData.property);
     if (!propertyData) {
-      throw new Error("Property not found");
+      throw new AppError(404,"Property not found");
     }
   }
   if (paymentData.user) {
     const userData = await User.findById(paymentData.user);
     if (!userData) {
-      throw new Error("User not found");
+      throw new AppError(404,"User not found");
     }
   }
   if (paymentData.category) {
-    throw new Error("Category cannot be updated");
+    throw new AppError(404,"Category cannot be updated");
   }
 
   const payment = await PropertyPayment.findByIdAndUpdate(id, paymentData, {

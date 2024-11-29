@@ -12,6 +12,7 @@ import { ScheduleRoutes } from "../modules/schedule/schedule.route";
 import { InquiryRoutes } from "../modules/inquiry/inquiry.router";
 import { StatsRoutes } from "../modules/stats/stats.route";
 import { PaymentRoutes } from "../modules/payment/payment.routes";
+import { PropertyPaymentRoutes } from "../modules/propertyPayment/propertyPayment.router";
 
 type TModuleRoutes = {
   path: string;
@@ -66,6 +67,7 @@ const moduleRoutes: TModuleRoutes[] = [
     route: StatsRoutes,
   },
   { path: "/payments", route: PaymentRoutes },
+  { path: "/property-payment", route: PropertyPaymentRoutes },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
