@@ -8,13 +8,13 @@ import config from "../../config";
 const loginEmailUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "email");
 
-  const { accessToken, user }: any = result;
-  res.cookie("accessToken", accessToken, {
-    secure: config.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
-  });
+  const { refreshToken, accessToken, user }: any = result;
+
+  // res.cookie("accessToken", accessToken, {
+  //   secure: config.NODE_ENV === "production",
+  //   httpOnly: true,
+  //   sameSite: "lax",
+  // });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -22,7 +22,7 @@ const loginEmailUser = catchAsync(async (req, res) => {
     message: "User is logged in successfully!",
     data: {
       accessToken,
-
+      refreshToken,
       user,
     },
   });
@@ -30,13 +30,13 @@ const loginEmailUser = catchAsync(async (req, res) => {
 const loginFacebookUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "facebook");
 
-  const { accessToken, user }: any = result;
-  res.cookie("accessToken", accessToken, {
-    secure: config.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
-  });
+  const { refreshToken, accessToken, user }: any = result;
+
+  // res.cookie("accessToken", accessToken, {
+  //   secure: config.NODE_ENV === "production",
+  //   httpOnly: true,
+  //   sameSite: "lax",
+  // });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -44,6 +44,7 @@ const loginFacebookUser = catchAsync(async (req, res) => {
     message: "User is logged in successfully!",
     data: {
       accessToken,
+      refreshToken,
       user,
     },
   });
@@ -52,13 +53,12 @@ const loginFacebookUser = catchAsync(async (req, res) => {
 const loginTwitterUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "twitter");
 
-  const { accessToken, user }: any = result;
-  res.cookie("accessToken", accessToken, {
-    secure: config.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
-  });
+  const { refreshToken, accessToken, user }: any = result;
+  // res.cookie("accessToken", accessToken, {
+  //   secure: config.NODE_ENV === "production",
+  //   httpOnly: true,
+  //   sameSite: "lax",
+  // });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -66,7 +66,7 @@ const loginTwitterUser = catchAsync(async (req, res) => {
     message: "User is logged in successfully!",
     data: {
       accessToken,
-
+      refreshToken,
       user,
     },
   });
@@ -75,12 +75,11 @@ const loginTwitterUser = catchAsync(async (req, res) => {
 const registerByEmail = catchAsync(async (req, res) => {
   const result = await AuthServices.registerByEmail(req.body);
 
-  res.cookie("accessToken", result?.accessToken, {
-    secure: config.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
-  });
+  // res.cookie("accessToken", result?.accessToken, {
+  //   secure: config.NODE_ENV === "production",
+  //   httpOnly: true,
+  //   sameSite: "lax",
+  // });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

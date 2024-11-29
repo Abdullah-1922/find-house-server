@@ -46,8 +46,6 @@ const generateTokens = (user: any) => {
 const loginUser = async (payload: TAuth, provider?: string) => {
   let user;
 
-  console.log("admin data=>", payload);
-
   if (provider === "email") {
     user = await Auth.findOne({ email: payload.email });
     if (!user) throw new AppError(404, "User not found");
@@ -62,6 +60,8 @@ const loginUser = async (payload: TAuth, provider?: string) => {
 
     const tokens = generateTokens(user);
     user = await User.findOne({ email: payload.email }).populate("auth");
+
+    console.log("admin data=>", tokens, user);
     return { ...tokens, user };
   }
 
