@@ -1,5 +1,4 @@
 import bcryptjs from "bcryptjs";
-import crypto from "crypto";
 import { User } from "../User/user.model";
 import { TAuth } from "./auth.interface";
 import { createToken } from "./auth.utils"; // Utility to create JWT
@@ -47,6 +46,8 @@ const generateTokens = (user: any) => {
 const loginUser = async (payload: TAuth, provider?: string) => {
   let user;
 
+  console.log("admin data=>", payload);
+
   if (provider === "email") {
     user = await Auth.findOne({ email: payload.email });
     if (!user) throw new AppError(404, "User not found");
@@ -61,6 +62,24 @@ const loginUser = async (payload: TAuth, provider?: string) => {
 
     const tokens = generateTokens(user);
     user = await User.findOne({ email: payload.email }).populate("auth");
+    return { ...tokens, user };
+  }
+
+  if (provider === "facebook") {
+    if (!payload.facebookId) throw new AppError(400, "Facebook ID is required");
+
+    user = await Auth.findOne({ facebookId: payload.facebookId });
+    if (!user) user = await registerSocialUser(payload, "facebook");
+    const tokens = generateTokens(user);
+    return { ...tokens, user };
+  }
+
+  if (provider === "twitter") {
+    if (!payload.twitterId) throw new AppError(400, "Twitter ID is required");
+
+    user = await Auth.findOne({ twitterId: payload.twitterId });
+    if (!user) user = await registerSocialUser(payload, "twitter");
+    const tokens = generateTokens(user);
     return { ...tokens, user };
   }
 };
@@ -81,6 +100,25 @@ const registerByEmail = async (payload: TAuth) => {
   const tokens = generateTokens(authData);
 
   return { ...tokens, user: newUser };
+};
+
+const registerSocialUser = async (
+  userData: TAuth,
+  provider: "facebook" | "twitter",
+) => {
+  const authData = await Auth.create({
+    ...userData,
+    provider,
+    [provider === "facebook" ? "facebookId" : "twitterId"]:
+      userData[provider === "facebook" ? "facebookId" : "twitterId"],
+  });
+
+  await User.create({
+    ...userData,
+    auth: authData._id,
+  });
+
+  return authData;
 };
 
 const forgotPassword = async (email: string) => {

@@ -8,7 +8,7 @@ import config from "../../config";
 const loginEmailUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "email");
 
-  const { refreshToken, accessToken, user }: any = result;
+  const { accessToken, user }: any = result;
   res.cookie("accessToken", accessToken, {
     secure: config.NODE_ENV === "production",
     httpOnly: true,
@@ -22,7 +22,7 @@ const loginEmailUser = catchAsync(async (req, res) => {
     message: "User is logged in successfully!",
     data: {
       accessToken,
-      refreshToken,
+
       user,
     },
   });
@@ -30,7 +30,7 @@ const loginEmailUser = catchAsync(async (req, res) => {
 const loginFacebookUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "facebook");
 
-  const { refreshToken, accessToken, user }: any = result;
+  const { accessToken, user }: any = result;
   res.cookie("accessToken", accessToken, {
     secure: config.NODE_ENV === "production",
     httpOnly: true,
@@ -44,7 +44,6 @@ const loginFacebookUser = catchAsync(async (req, res) => {
     message: "User is logged in successfully!",
     data: {
       accessToken,
-      refreshToken,
       user,
     },
   });
@@ -53,7 +52,7 @@ const loginFacebookUser = catchAsync(async (req, res) => {
 const loginTwitterUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "twitter");
 
-  const { refreshToken, accessToken, user }: any = result;
+  const { accessToken, user }: any = result;
   res.cookie("accessToken", accessToken, {
     secure: config.NODE_ENV === "production",
     httpOnly: true,
@@ -67,7 +66,7 @@ const loginTwitterUser = catchAsync(async (req, res) => {
     message: "User is logged in successfully!",
     data: {
       accessToken,
-      refreshToken,
+
       user,
     },
   });
