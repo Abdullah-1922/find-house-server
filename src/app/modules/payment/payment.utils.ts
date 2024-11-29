@@ -18,8 +18,8 @@ export const initialPayment = async (paymentData: IPayment) => {
       store_id: config.store_id,
       signature_key: config.signature_key,
       tran_id: paymentData.transactionId,
-      success_url: `${backendUrl}/api/v1/payment/confirmation/${paymentData.buyerId}?transactionId=${paymentData.transactionId}&status=success`,
-      fail_url: `${backendUrl}/api/v1/payment/confirmation/${paymentData.buyerId}?transactionId=${paymentData.transactionId}&status=failed`,
+      success_url: `${backendUrl}/api/v2/payments/confirmation/${paymentData.customerId}?transactionId=${paymentData.transactionId}&status=success`,
+      fail_url: `${backendUrl}/api/v2/payments/confirmation/${paymentData.customerId}?transactionId=${paymentData.transactionId}&status=failed`,
       cancel_url: `${frontendUrl}`,
       amount: paymentData.amount,
       currency: paymentData.currency,
@@ -37,17 +37,16 @@ export const initialPayment = async (paymentData: IPayment) => {
     });
 
     return response.data;
-  } catch (error) {
-    console.error("Error initiating payment:", error);
+  } catch (error: any) {
+    if (error.response) {
+      console.error("API Error Response:", error.response.data);
+    } else {
+      console.error("Unexpected Error:", error.message);
+    }
     throw new Error("Failed to initiate payment");
   }
 };
 
-/**
- * Verifies a payment status using the Aamarpay gateway.
- * @param transactionId - The unique transaction ID for the payment.
- * @returns Verification response data from the payment gateway.
- */
 export const verifyPayment = async (transactionId: string) => {
   try {
     const response = await axios.get(config.payment_verify_url!, {

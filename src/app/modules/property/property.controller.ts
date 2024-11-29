@@ -18,6 +18,24 @@ const createProperty = catchAsync(async (req, res) => {
 const getAllProperties = catchAsync(async (req, res) => {
   const { result, meta } = await PropertyServices.getAllProperties(req.query);
 
+  console.log("req.query", req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Properties retrieved successfully",
+    meta: meta,
+    data: result,
+  });
+});
+
+const getMyAllProperties = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const { result, meta } = await PropertyServices.getMyAllProperties(
+    req.query,
+    userId,
+  );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -120,6 +138,7 @@ const getMyFavoriteProperties = catchAsync(async (req, res) => {
 export const PropertyControllers = {
   createProperty,
   getAllProperties,
+  getMyAllProperties,
   getSingleProperty,
   updateProperty,
   deleteProperty,

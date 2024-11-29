@@ -79,3 +79,8 @@ export type TProperty = {
   contactInfo: IContactInfo;
   [key: string]: any;
 };
+
+export interface TRangeFilters {
+  price?: { $gte: number; $lte: number };
+  area?: { $gte: number; $lte: number };
+}

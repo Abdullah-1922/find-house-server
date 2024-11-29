@@ -2,6 +2,8 @@ import express from "express";
 import { UserController } from "./user.controller";
 import auth from "../../middlewares/auth";
 import { USER_ROLE } from "./user.utils";
+import validateRequest from "../../middlewares/validateRequest";
+import { UserValidations } from "./user.validation";
 
 const router = express.Router();
 
@@ -18,7 +20,7 @@ router.get(
 );
 
 router.get(
-  "/:role",
+  "/role-based-user/:role",
   auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE?.agent),
   UserController.getRoleBasedUser,
 );
@@ -31,7 +33,9 @@ router.patch(
 
 router.put(
   "/:id",
+  validateRequest(UserValidations.updateUserValidationSchema),
   auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE?.agent),
+
   UserController.updateUserById,
 );
 

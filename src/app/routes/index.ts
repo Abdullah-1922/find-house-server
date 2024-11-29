@@ -10,8 +10,12 @@ import { ProductRoutes } from "../modules/product/product.route";
 import { ProductReviewRoutes } from "../modules/product review/productReview.route";
 import { ScheduleRoutes } from "../modules/schedule/schedule.route";
 import { InquiryRoutes } from "../modules/inquiry/inquiry.router";
+<<<<<<< HEAD
 import { PropertyPaymentRoutes } from "../modules/propertyPayment/propertyPayment.router";
 import { StatsRoutes } from '../modules/stats/stats.route';
+=======
+import { PaymentRoutes } from "../modules/payment/payment.routes";
+>>>>>>> a650bd40953e01545f3b47193a26a986bc470610
 
 type TModuleRoutes = {
   path: string;
@@ -58,16 +62,17 @@ const moduleRoutes: TModuleRoutes[] = [
     route: InquiryRoutes,
   },
   {
-    path: "/property-payment",
-    route: PropertyPaymentRoutes,
-  },
-  {
     path: "/blog",
     route: BlogRoutes,
   },
   {
+<<<<<<< HEAD
     path: "/stats",
     route: StatsRoutes,
+=======
+    path: "/payments",
+    route: PaymentRoutes,
+>>>>>>> a650bd40953e01545f3b47193a26a986bc470610
   },
 ];
 

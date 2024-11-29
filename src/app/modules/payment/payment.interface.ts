@@ -1,9 +1,8 @@
 import { Types } from "mongoose";
 
 export interface IPayment {
-  sellerId: Types.ObjectId;
-  buyerId: Types.ObjectId;
-  propertyId: Types.ObjectId;
+  customerId: Types.ObjectId;
+  products: Types.ObjectId[];
   name: string;
   email: string;
   phone: string;
@@ -13,8 +12,10 @@ export interface IPayment {
   address: string;
   zip: string;
   transactionId: string;
-  field: "pending" | "completed" | "failed";
-  gatewayName: string;
-  currency: string;
+  status: "Pending" | "Paid" | "Failed" | "Canceled";
+  gatewayName: "Cash On Delivery" | "Online Payment";
+  currency: "BDT" | "USD";
   amount: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

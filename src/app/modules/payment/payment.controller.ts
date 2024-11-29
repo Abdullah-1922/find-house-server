@@ -3,27 +3,32 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { PaymentService } from "./payment.service";
 
-const subscriptions = catchAsync(async (req, res) => {
-  const { userId } = req.params;
-
-  const result = await PaymentService.subscriptionsIntoBD(
-    req.body,
-    userId as string,
-  );
+const createPayment = catchAsync(async (req, res) => {
+  const result = await PaymentService.createPayment(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Your subscriptions successful",
+    message: "Your payment successful",
+    data: result,
+  });
+});
+
+const cashOnDeliveryPayment = catchAsync(async (req, res) => {
+  const result = await PaymentService.cashOnDeliveryPayment(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Your order successful",
     data: result,
   });
 });
 
 const paymentConformation = catchAsync(async (req, res) => {
-  const { transitionId, status } = req.query;
+  const { transactionId, status } = req.query;
   const { userId } = req.params;
 
   const result = await PaymentService.paymentConformationIntoDB(
-    transitionId as string,
+    transactionId as string,
     status as string,
     userId as string,
   );
@@ -31,8 +36,28 @@ const paymentConformation = catchAsync(async (req, res) => {
   res.send(result);
 });
 
-const getPaymentsData = catchAsync(async (req, res) => {
-  const { result, meta } = await PaymentService.getPaymentsData(req.query);
+const CasOnDeliveryStatusUpdate = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  const result = await PaymentService.CasOnDeliveryStatusUpdate(
+    req.body,
+    userId as string,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Cash on delivery status updated successfully",
+    data: result,
+  });
+});
+
+const getMyPaymentsData = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const { result, meta } = await PaymentService.getMyPaymentsData(
+    req.query,
+    userId,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -55,8 +80,10 @@ const getAllPaymentsDatForAnalytics = catchAsync(async (req, res) => {
 });
 
 export const PaymentController = {
-  subscriptions,
+  createPayment,
+  cashOnDeliveryPayment,
   paymentConformation,
-  getPaymentsData,
+  CasOnDeliveryStatusUpdate,
+  getMyPaymentsData,
   getAllPaymentsDatForAnalytics,
 };
