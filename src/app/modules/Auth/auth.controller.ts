@@ -3,11 +3,18 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { AuthServices } from "./auth.service";
 import AppError from "../../errors/AppError";
+import config from "../../config";
 
 const loginEmailUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "email");
 
   const { refreshToken, accessToken, user }: any = result;
+  res.cookie("accessToken", accessToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+  });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -24,6 +31,12 @@ const loginFacebookUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "facebook");
 
   const { refreshToken, accessToken, user }: any = result;
+  res.cookie("accessToken", accessToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+  });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -41,6 +54,12 @@ const loginTwitterUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "twitter");
 
   const { refreshToken, accessToken, user }: any = result;
+  res.cookie("accessToken", accessToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+  });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -56,7 +75,13 @@ const loginTwitterUser = catchAsync(async (req, res) => {
 
 const registerByEmail = catchAsync(async (req, res) => {
   const result = await AuthServices.registerByEmail(req.body);
-  console.log(result);
+
+  res.cookie("accessToken", result?.accessToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+  });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
