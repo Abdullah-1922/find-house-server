@@ -26,13 +26,55 @@ class QueryBuilder<T> {
   }
 
   filter() {
-    const queryObj = { ...this.query }; // copy
+    const queryObj: Record<string, any> = { ...this.query }; // Ensure queryObj is an object type
 
-    // Filtering
-    const excludeFields = ["searchTerm", "sort", "limit", "page", "fields"];
+    // Exclude fields that aren't directly queryable in MongoDB
+    const excludeFields = [
+      "searchTerm",
+      "sort",
+      "limit",
+      "page",
+      "fields",
+      "minPrice",
+      "maxPrice",
+      "minArea",
+      "maxArea",
+      "features",
+      "location",
+    ];
+    excludeFields.forEach((field) => delete queryObj[field]);
 
-    excludeFields.forEach((el) => delete queryObj[el]);
+    // Price range filter
+    if (this.query.minPrice || this.query.maxPrice) {
+      queryObj.price = {
+        ...(this.query.minPrice ? { $gte: Number(this.query.minPrice) } : {}),
+        ...(this.query.maxPrice ? { $lte: Number(this.query.maxPrice) } : {}),
+      };
+    }
 
+    // Area range filter
+    if (this.query.minArea || this.query.maxArea) {
+      queryObj.area = {
+        ...(this.query.minArea ? { $gte: Number(this.query.minArea) } : {}),
+        ...(this.query.maxArea ? { $lte: Number(this.query.maxArea) } : {}),
+      };
+    }
+
+    // Features array filter
+    if (this.query.features) {
+      const featuresArray = (this.query.features as string).split(",");
+      queryObj.features = { $all: featuresArray };
+    }
+
+    // Location filter
+    if (this.query.location) {
+      queryObj["location.city"] = {
+        $regex: this.query.location,
+        $options: "i",
+      };
+    }
+
+    // Add the filtered query to the modelQuery
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
 
     return this;

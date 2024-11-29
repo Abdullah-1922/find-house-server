@@ -20,13 +20,13 @@ router.post(
 
 router.get(
   "/",
-  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent), // Accessible by admin, user, and agent
+  // auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent), // Accessible by admin, user, and agent
   PropertyControllers.getAllProperties,
 );
 
 router.get(
   "/my-properties/:userId",
-  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent), // Accessible by admin, user, and agent
+  // auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent), // Accessible by admin, user, and agent
   PropertyControllers.getMyAllProperties,
 );
 

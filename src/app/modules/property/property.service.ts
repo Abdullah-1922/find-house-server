@@ -42,6 +42,7 @@ const getAllProperties = async (query: Record<string, unknown>) => {
 
   const result = await propertyQuery.modelQuery;
   const meta = await propertyQuery.countTotal();
+
   return { result, meta };
 };
 
