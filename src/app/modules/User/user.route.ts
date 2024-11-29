@@ -7,23 +7,11 @@ import { UserValidations } from "./user.validation";
 
 const router = express.Router();
 
-router.get(
-  "/",
-  // auth(USER_ROLE.admin),
-  UserController.getAllUsers,
-);
+router.get("/", UserController.getAllUsers);
 
-router.get(
-  "/:id",
-  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE?.agent),
-  UserController.findUserById,
-);
+router.get("/:id", UserController.findUserById);
 
-router.get(
-  "/role-based-user/:role",
-  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE?.agent),
-  UserController.getRoleBasedUser,
-);
+router.get("/role-based-user/:role", UserController.getRoleBasedUser);
 
 router.patch(
   "/update-role/:id/:role",
