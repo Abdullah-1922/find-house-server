@@ -5,9 +5,7 @@ import { InquiryControllers } from "./inquiry.controller";
 const router = express.Router();
 
 router.post("/", InquiryControllers.createInquiry);
-
 router.get("/", InquiryControllers.getAllInquiries);
-
 router.get("/user/:userId", InquiryControllers.inquiryByUser);
 router.get("/agent/:agentId", InquiryControllers.inquiryByAgent);
 router.get("/:inquiryId", InquiryControllers.getSingleInquiry);

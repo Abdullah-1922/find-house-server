@@ -10,7 +10,9 @@ import { ProductRoutes } from "../modules/product/product.route";
 import { ProductReviewRoutes } from "../modules/product review/productReview.route";
 import { ScheduleRoutes } from "../modules/schedule/schedule.route";
 import { InquiryRoutes } from "../modules/inquiry/inquiry.router";
+import { StatsRoutes } from "../modules/stats/stats.route";
 import { PaymentRoutes } from "../modules/payment/payment.routes";
+import { PropertyPaymentRoutes } from "../modules/propertyPayment/propertyPayment.router";
 
 type TModuleRoutes = {
   path: string;
@@ -61,9 +63,11 @@ const moduleRoutes: TModuleRoutes[] = [
     route: BlogRoutes,
   },
   {
-    path: "/payments",
-    route: PaymentRoutes,
+    path: "/stats",
+    route: StatsRoutes,
   },
+  { path: "/payments", route: PaymentRoutes },
+  { path: "/property-payment", route: PropertyPaymentRoutes },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

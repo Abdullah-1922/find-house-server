@@ -23,6 +23,11 @@ router.get(
   // auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent), // Accessible by admin, user, and agent
   PropertyControllers.getAllProperties,
 );
+router.get(
+  "/my-property/:userId",
+  //   auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.driver), // Accessible by admin, user, and driver
+  PropertyControllers.getMyProperties,
+);
 
 router.get(
   "/my-properties/:userId",

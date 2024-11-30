@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PaymentRoutes = void 0;
+const express_1 = require("express");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const payment_controller_1 = require("./payment.controller");
+const user_utils_1 = require("../User/user.utils");
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const payment_validation_1 = require("./payment.validation");
+const router = (0, express_1.Router)();
+router.post("/online", (0, validateRequest_1.default)(payment_validation_1.PaymentSchema), payment_controller_1.PaymentController.createPayment);
+router.post("/cash-on-delivery", (0, validateRequest_1.default)(payment_validation_1.PaymentSchema), payment_controller_1.PaymentController.cashOnDeliveryPayment);
+router.post("/cash-on-delivery/:userId", payment_controller_1.PaymentController.CasOnDeliveryStatusUpdate);
+router.post("/confirmation/:userId", payment_controller_1.PaymentController.paymentConformation);
+router.get("/:userId", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.user, user_utils_1.USER_ROLE.agent), payment_controller_1.PaymentController.getMyPaymentsData);
+router.get("/product-payments/:gatewayName", payment_controller_1.PaymentController.getAllPaymentsData);
+router.get("/", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.user, user_utils_1.USER_ROLE.agent), payment_controller_1.PaymentController.getAllPayments);
+router.patch("/:id", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.user, user_utils_1.USER_ROLE.agent), payment_controller_1.PaymentController.updatePaymentStatus);
+router.get("/analytics", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.user, user_utils_1.USER_ROLE.agent), payment_controller_1.PaymentController.getMyPaymentsData);
+exports.PaymentRoutes = router;

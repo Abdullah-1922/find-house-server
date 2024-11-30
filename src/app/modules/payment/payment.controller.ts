@@ -25,12 +25,10 @@ const cashOnDeliveryPayment = catchAsync(async (req, res) => {
 
 const paymentConformation = catchAsync(async (req, res) => {
   const { transactionId, status } = req.query;
-  const { userId } = req.params;
 
   const result = await PaymentService.paymentConformationIntoDB(
     transactionId as string,
     status as string,
-    userId as string,
   );
 
   res.send(result);
@@ -94,6 +92,31 @@ const getAllPaymentsDatForAnalytics = catchAsync(async (req, res) => {
   });
 });
 
+const getAllPayments = catchAsync(async (req, res) => {
+  const query = req.body.query
+  const result = await PaymentService.getAllPayments(query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment data retrieved successfully",
+    data: result,
+  });
+});
+
+const updatePaymentStatus = catchAsync(async (req, res) => {
+  const id = req.params.id
+  const status = req.body.status
+  const result = await PaymentService.updatePaymentStatus(id, status);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment status update successfully",
+    data: result,
+  });
+});
+
 export const PaymentController = {
   createPayment,
   cashOnDeliveryPayment,
@@ -102,4 +125,6 @@ export const PaymentController = {
   getMyPaymentsData,
   getAllPaymentsData,
   getAllPaymentsDatForAnalytics,
+  getAllPayments,
+  updatePaymentStatus
 };

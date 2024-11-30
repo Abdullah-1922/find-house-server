@@ -26,7 +26,12 @@ const getAllInquiries = async (query: any) => {
   const inquiryQuery = new QueryBuilder(
     Inquiry.find().populate("agent user"),
     query,
-  );
+  )
+    .search(["message", "email"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
   const result = await inquiryQuery.modelQuery;
   const meta = await inquiryQuery.countTotal();
@@ -53,18 +58,27 @@ const getInquiriesByUser = async (userId: string, query: any) => {
   const inquiryQuery = new QueryBuilder(
     Inquiry.find({ user: userId }).populate("agent user"),
     query,
-  );
+  )
+    .search(["message", "email"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
   const result = await inquiryQuery.modelQuery;
   const meta = await inquiryQuery.countTotal();
   return { result, meta };
 };
 const getInquiriesByAgent = async (agentId: string, query: any) => {
-  console.log(agentId);
   const inquiryQuery = new QueryBuilder(
     Inquiry.find({ agent: agentId }).populate("agent user"),
     query,
-  );
+  )
+    .search(["message", "email"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
   const result = await inquiryQuery.modelQuery;
   const meta = await inquiryQuery.countTotal();
@@ -76,7 +90,7 @@ const updateInquiry = async (id: string, payload: IInquiry) => {
     throw new AppError(404, "Inquiry not found");
   }
   return inquiry;
-}
+};
 
 export const InquiryServices = {
   createInquiry,

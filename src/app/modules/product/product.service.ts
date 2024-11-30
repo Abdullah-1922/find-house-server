@@ -64,7 +64,6 @@ const deleteProduct = async (id: string) => {
 };
 
 const addProductFavorite = async (productId: string, userId: string) => {
-  console.log(productId, userId);
   // Validate productId and userId
   if (!mongoose.Types.ObjectId.isValid(productId)) {
     throw new AppError(400, "Invalid product ID format");

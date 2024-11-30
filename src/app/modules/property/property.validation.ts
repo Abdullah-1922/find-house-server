@@ -51,7 +51,7 @@ export const createPropertyValidationSchema = z.object({
           "Alarm",
           "Window Covering",
           "Refrigerator",
-          "TV Cable & WIFI",
+          "TV Cable & Wifi",
           "Microwave",
         ]),
       )
@@ -89,7 +89,7 @@ export const updatePropertyValidationSchema = z.object({
           "Alarm",
           "Window Covering",
           "Refrigerator",
-          "TV Cable & WIFI",
+          "TV Cable & Wifi",
           "Microwave",
         ]),
       )

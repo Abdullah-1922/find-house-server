@@ -7,8 +7,6 @@ import { User } from "./user.model";
 
 const findUserById = async (userId: string) => {
   const result = await User.findOne({ auth: userId }).populate("auth");
-
-  console.log(result);
   return result;
 };
 
@@ -29,7 +27,6 @@ const getAllUsers = async (query: Record<string, unknown>) => {
 };
 
 const updateUserById = async (userId: string, payload: Partial<TUser>) => {
-  console.log("service user data", payload);
   const result = await User.findByIdAndUpdate(userId, payload, {
     new: true,
   });

@@ -78,6 +78,25 @@ const getSingleProperty = async (id: string) => {
   }
   return property;
 };
+const getMyProperties = async (id: string, query: any) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new AppError(400, "Invalid property ID format");
+  }
+
+  const propertyQuery = new QueryBuilder(
+    Property.find({ author: id }).populate(["author", "ownedBy"]),
+    query,
+  )
+    .search(["title", "description", "category", "type"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await propertyQuery.modelQuery;
+  const meta = await propertyQuery.countTotal();
+  return { result, meta };
+};
 
 // Update a property by ID
 const updateProperty = async (id: string, payload: Partial<TProperty>) => {
@@ -221,4 +240,5 @@ export const PropertyServices = {
   addPropertyFavorite,
   removePropertyFavorite,
   getMyFavoriteProperties,
+  getMyProperties,
 };

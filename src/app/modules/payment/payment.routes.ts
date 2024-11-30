@@ -39,7 +39,12 @@ router.get(
 router.get(
   "/",
   Auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent),
-  PaymentController.getMyPaymentsData,
+  PaymentController.getAllPayments,
+);
+router.patch(
+  "/:id",
+  Auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent),
+  PaymentController.updatePaymentStatus,
 );
 
 router.get(
@@ -47,5 +52,4 @@ router.get(
   Auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent),
   PaymentController.getMyPaymentsData,
 );
-
 export const PaymentRoutes = router;

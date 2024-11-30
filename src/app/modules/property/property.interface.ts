@@ -21,7 +21,7 @@ export type Features =
   | "Alarm"
   | "Window Covering"
   | "Refrigerator"
-  | "TV Cable & WIFI"
+  | "TV Cable & Wifi"
   | "Microwave";
 
 export type ExtraInfoAge =

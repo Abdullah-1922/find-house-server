@@ -13,6 +13,8 @@ router.post(
 
 router.get("/:productId", ProductReviewControllers.getAllReviewsByProduct);
 
+
+
 router.patch(
   "/:reviewId",
   validateRequest(ProductReviewValidation.UpdateReviewValidationSchema),
@@ -20,5 +22,9 @@ router.patch(
 );
 
 router.delete("/:reviewId", ProductReviewControllers.deleteReview);
+
+router.get("/", ProductReviewControllers.getAllReviews);
+router.get("/user-review/:userId", ProductReviewControllers.getAllReviewsByUser);
+
 
 export const ProductReviewRoutes = router;

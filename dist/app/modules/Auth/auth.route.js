@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const validateRequest_1 = __importDefault(require("../../middlewares/validateRequest"));
+const auth_validation_1 = require("./auth.validation");
+const auth_controller_1 = require("./auth.controller");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const user_utils_1 = require("../User/user.utils");
+const router = express_1.default.Router();
+router.post("/login/email", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginEmailValidationSchema), auth_controller_1.AuthControllers.loginEmailUser);
+router.post("/login/facebook", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginFacebookValidationSchema), auth_controller_1.AuthControllers.loginFacebookUser);
+router.post("/login/twitter", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginTwitterValidationSchema), auth_controller_1.AuthControllers.loginTwitterUser);
+router.post("/signup/email", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.registerEmailUserValidationSchema), auth_controller_1.AuthControllers.registerByEmail);
+router.post("/forgot-password", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.forgotPasswordValidationSchema), auth_controller_1.AuthControllers.forgotPassword);
+router.post("/reset-password", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.agent, user_utils_1.USER_ROLE.user), auth_controller_1.AuthControllers.resetPassword);
+router.post("/change-password", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.agent, user_utils_1.USER_ROLE.user), (0, validateRequest_1.default)(auth_validation_1.AuthValidation.changePasswordValidationSchema), auth_controller_1.AuthControllers.changePassword);
+exports.AuthRoutes = router;
