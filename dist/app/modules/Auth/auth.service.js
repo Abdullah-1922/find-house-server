@@ -50,6 +50,25 @@ const loginUser = (payload, provider) => __awaiter(void 0, void 0, void 0, funct
             throw new AppError_1.default(400, "Password is incorrect");
         const tokens = generateTokens(user);
         user = yield user_model_1.User.findOne({ email: payload.email }).populate("auth");
+        console.log("admin data=>", tokens, user);
+        return Object.assign(Object.assign({}, tokens), { user });
+    }
+    if (provider === "facebook") {
+        if (!payload.facebookId)
+            throw new AppError_1.default(400, "Facebook ID is required");
+        user = yield auth_model_1.default.findOne({ facebookId: payload.facebookId });
+        if (!user)
+            user = yield registerSocialUser(payload, "facebook");
+        const tokens = generateTokens(user);
+        return Object.assign(Object.assign({}, tokens), { user });
+    }
+    if (provider === "twitter") {
+        if (!payload.twitterId)
+            throw new AppError_1.default(400, "Twitter ID is required");
+        user = yield auth_model_1.default.findOne({ twitterId: payload.twitterId });
+        if (!user)
+            user = yield registerSocialUser(payload, "twitter");
+        const tokens = generateTokens(user);
         return Object.assign(Object.assign({}, tokens), { user });
     }
 });
@@ -63,6 +82,11 @@ const registerByEmail = (payload) => __awaiter(void 0, void 0, void 0, function*
     const newUser = yield user_model_1.User.create(Object.assign(Object.assign({}, payload), { auth: authData._id }));
     const tokens = generateTokens(authData);
     return Object.assign(Object.assign({}, tokens), { user: newUser });
+});
+const registerSocialUser = (userData, provider) => __awaiter(void 0, void 0, void 0, function* () {
+    const authData = yield auth_model_1.default.create(Object.assign(Object.assign({}, userData), { provider, [provider === "facebook" ? "facebookId" : "twitterId"]: userData[provider === "facebook" ? "facebookId" : "twitterId"] }));
+    yield user_model_1.User.create(Object.assign(Object.assign({}, userData), { auth: authData._id }));
+    return authData;
 });
 const forgotPassword = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield auth_model_1.default.findOne({ email });

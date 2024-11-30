@@ -32,7 +32,7 @@ const adminSeed = () => __awaiter(void 0, void 0, void 0, function* () {
             const newAuth = yield auth_model_1.default.create([
                 {
                     email: config_1.default.admin_email,
-                    password: hashedPassword, // Use the hashed password
+                    password: hashedPassword,
                     provider: config_1.default.admin_provider,
                     role: user_utils_1.USER_ROLE.admin,
                 },

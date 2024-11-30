@@ -16,16 +16,15 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 //parsers
 app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
     origin: [
         "http://localhost:3000",
-        "http://localhost:5000",
-        "http://localhost:3001",
         "https://wwwfind-house.vercel.app",
+        "https://find-house-client.vercel.app",
     ],
-    credentials: true,
+    credentials: true, // Required for cookies
 }));
-app.use((0, cookie_parser_1.default)());
 // application routes
 app.use("/api/v2", routes_1.default);
 app.get("/", (req, res) => {

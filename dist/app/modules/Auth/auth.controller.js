@@ -18,8 +18,14 @@ const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const auth_service_1 = require("./auth.service");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
+const config_1 = __importDefault(require("../../config"));
 const loginEmailUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "email");
+    res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
+        secure: config_1.default.NODE_ENV === "production",
+        httpOnly: true,
+        sameSite: "lax",
+    });
     const { refreshToken, accessToken, user } = result;
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -34,6 +40,11 @@ const loginEmailUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 }));
 const loginFacebookUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "facebook");
+    res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
+        secure: config_1.default.NODE_ENV === "production",
+        httpOnly: true,
+        sameSite: "lax",
+    });
     const { refreshToken, accessToken, user } = result;
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -48,6 +59,11 @@ const loginFacebookUser = (0, catchAsync_1.default)((req, res) => __awaiter(void
 }));
 const loginTwitterUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "twitter");
+    res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
+        secure: config_1.default.NODE_ENV === "production",
+        httpOnly: true,
+        sameSite: "lax",
+    });
     const { refreshToken, accessToken, user } = result;
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -62,7 +78,11 @@ const loginTwitterUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 
 }));
 const registerByEmail = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.registerByEmail(req.body);
-    console.log(result);
+    res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
+        secure: config_1.default.NODE_ENV === "production",
+        httpOnly: true,
+        sameSite: "lax",
+    });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -83,7 +103,6 @@ const forgotPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 // Reset Password
 const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization;
-    console.log("token", token);
     const result = yield auth_service_1.AuthServices.resetPassword(req.body, token);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -95,7 +114,6 @@ const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 // change Password Controller
 const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { token, currentPassword, newPassword } = req.body;
-    console.log(req.body);
     if (!token || !currentPassword || !newPassword) {
         throw new AppError_1.default(400, "All fields are required");
     }

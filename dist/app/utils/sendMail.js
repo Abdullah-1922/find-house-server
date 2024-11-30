@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
-const sendEmail = (_a) => __awaiter(void 0, [_a], void 0, function* ({ to, subject, resetLink, }) {
+const sendEmail = ({ to, subject, resetLink, }) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = nodemailer_1.default.createTransport({
         service: "Gmail",
         auth: {

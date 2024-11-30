@@ -20,7 +20,6 @@ router.post(
 
 router.post(
   "/cash-on-delivery/:userId",
-  validateRequest(PaymentSchema),
   PaymentController.CasOnDeliveryStatusUpdate,
 );
 
@@ -30,6 +29,11 @@ router.get(
   "/:userId",
   Auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.agent),
   PaymentController.getMyPaymentsData,
+);
+
+router.get(
+  "/product-payments/:gatewayName",
+  PaymentController.getAllPaymentsData,
 );
 
 router.get(

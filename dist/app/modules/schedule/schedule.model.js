@@ -11,7 +11,7 @@ const scheduleSchema = new mongoose_1.Schema({
         type: String,
         required: true,
         match: /^([01]\d|2[0-3]):([0-5]\d)$/,
-    }, // 24-hour format
+    },
     isApproved: { type: Boolean, default: false },
     isAccepted: { type: Boolean, default: false },
 }, { timestamps: true });

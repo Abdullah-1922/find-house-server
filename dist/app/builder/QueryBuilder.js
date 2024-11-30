@@ -88,8 +88,8 @@ class QueryBuilder {
         return this;
     }
     countTotal() {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, _b;
             const totalQueries = this.modelQuery.getFilter();
             const total = yield this.modelQuery.model.countDocuments(totalQueries);
             const page = Number((_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.page) || 1;

@@ -16,7 +16,7 @@ exports.createUserValidationSchema = zod_1.z.object({
         secondName: zod_1.z
             .string()
             .min(2, "Second name must have at least 2 characters"),
-        auth: zod_1.z.string().nonempty("Auth ID is required"), // Auth ID must be provided
+        auth: zod_1.z.string().nonempty("Auth ID is required"),
         email: zod_1.z.string().email("Invalid email address").optional(),
         image: zod_1.z.string().url("Invalid image URL").optional(),
         phone: zod_1.z.string().optional(),
@@ -24,7 +24,7 @@ exports.createUserValidationSchema = zod_1.z.object({
             errorMap: () => ({ message: "Role must be admin, agent, or user" }),
         }),
         location: zod_1.z.string().optional(),
-        favoriteProperties: zod_1.z.array(zod_1.z.string()).optional(), // Assuming ObjectId as string
+        favoriteProperties: zod_1.z.array(zod_1.z.string()).optional(),
         favoriteProducts: zod_1.z.array(zod_1.z.string()).optional(),
         paymentHistory: zod_1.z.array(zod_1.z.string()).optional(),
         property: zod_1.z.array(zod_1.z.string()).optional(),

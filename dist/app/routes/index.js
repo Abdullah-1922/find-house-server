@@ -13,6 +13,8 @@ const schedule_route_1 = require("../modules/schedule/schedule.route");
 const inquiry_router_1 = require("../modules/inquiry/inquiry.router");
 const stats_route_1 = require("../modules/stats/stats.route");
 const payment_routes_1 = require("../modules/payment/payment.routes");
+const propertyPayment_router_1 = require("../modules/propertyPayment/propertyPayment.router");
+const newsLetter_route_1 = require("../modules/newsLetter/newsLetter.route");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -60,6 +62,8 @@ const moduleRoutes = [
         route: stats_route_1.StatsRoutes,
     },
     { path: "/payments", route: payment_routes_1.PaymentRoutes },
+    { path: "/property-payment", route: propertyPayment_router_1.PropertyPaymentRoutes },
+    { path: "/newsletter", route: newsLetter_route_1.NewsLetterRoutes },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 exports.default = router;

@@ -37,8 +37,7 @@ const cashOnDeliveryPayment = (0, catchAsync_1.default)((req, res) => __awaiter(
 }));
 const paymentConformation = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { transactionId, status } = req.query;
-    const { userId } = req.params;
-    const result = yield payment_service_1.PaymentService.paymentConformationIntoDB(transactionId, status, userId);
+    const result = yield payment_service_1.PaymentService.paymentConformationIntoDB(transactionId, status);
     res.send(result);
 }));
 const CasOnDeliveryStatusUpdate = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -62,6 +61,17 @@ const getMyPaymentsData = (0, catchAsync_1.default)((req, res) => __awaiter(void
         data: result,
     });
 }));
+const getAllPaymentsData = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { gatewayName } = req.params;
+    const { result, meta } = yield payment_service_1.PaymentService.getAllPaymentsData(req.query, gatewayName);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Payment data retrieved successfully",
+        meta: meta,
+        data: result,
+    });
+}));
 const getAllPaymentsDatForAnalytics = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield payment_service_1.PaymentService.getAllPaymentsDatForAnalytics();
     (0, sendResponse_1.default)(res, {
@@ -71,11 +81,35 @@ const getAllPaymentsDatForAnalytics = (0, catchAsync_1.default)((req, res) => __
         data: result,
     });
 }));
+const getAllPayments = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = req.body.query;
+    const result = yield payment_service_1.PaymentService.getAllPayments(query);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Payment data retrieved successfully",
+        data: result,
+    });
+}));
+const updatePaymentStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const status = req.body.status;
+    const result = yield payment_service_1.PaymentService.updatePaymentStatus(id, status);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Payment status update successfully",
+        data: result,
+    });
+}));
 exports.PaymentController = {
     createPayment,
     cashOnDeliveryPayment,
     paymentConformation,
     CasOnDeliveryStatusUpdate,
     getMyPaymentsData,
+    getAllPaymentsData,
     getAllPaymentsDatForAnalytics,
+    getAllPayments,
+    updatePaymentStatus
 };

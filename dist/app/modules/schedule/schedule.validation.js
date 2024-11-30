@@ -4,9 +4,9 @@ exports.ScheduleValidation = void 0;
 const zod_1 = require("zod");
 const CreateScheduleValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
-        user: zod_1.z.string().nonempty("User ID is required"), // User ObjectId
-        agent: zod_1.z.string().nonempty("Agent ID is required"), // Agent ObjectId
-        property: zod_1.z.string().nonempty("Property ID is required"), // Property ObjectId
+        user: zod_1.z.string().nonempty("User ID is required"),
+        agent: zod_1.z.string().nonempty("Agent ID is required"),
+        property: zod_1.z.string().nonempty("Property ID is required"),
         date: zod_1.z.string().refine((val) => !isNaN(Date.parse(val)), {
             message: "Invalid date format",
         }),
