@@ -46,7 +46,7 @@ const getPayments = async (query: any) => {
     PropertyPayment.find().populate("property user"),
     query,
   )
-  .search(["category", "extraInfo"])
+    .search(["category", "extraInfo"])
     .filter()
     .sort()
     .paginate()
@@ -56,12 +56,12 @@ const getPayments = async (query: any) => {
   const meta = await paymentQuery.countTotal();
   return { payments, meta };
 };
-const getPaymentsForAgent = async (userId:string,query: any) => {
+const getPaymentsForAgent = async (userId: string, query: any) => {
   const paymentQuery = new QueryBuilder(
-    PropertyPayment.find({user:userId}).populate("property user"),
+    PropertyPayment.find({ user: userId }).populate("property user"),
     query,
   )
-  .search(["category", "extraInfo"])
+    .search(["category", "extraInfo"])
     .filter()
     .sort()
     .paginate()
@@ -115,5 +115,5 @@ export const PropertyPaymentService = {
   getPayments,
   getPaymentById,
   updatePaymentPayment,
-  getPaymentsForAgent
+  getPaymentsForAgent,
 };
