@@ -54,10 +54,22 @@ const updatePropertyPayment = catchAsync(
     });
   },
 );
+const getPaymentsForAgent = catchAsync(async (req: Request, res: Response) => {
+  const {payments,meta} = await PropertyPaymentService.getPaymentsForAgent(req.params.userId,req.query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payments retrieved successfully (Agent)",
+    data: payments,
+    meta:meta
+  });
+});
 
 export const PropertyPaymentController = {
   createPayment,
   getPayments,
   getPaymentById,
   updatePropertyPayment,
+  getPaymentsForAgent
 };
