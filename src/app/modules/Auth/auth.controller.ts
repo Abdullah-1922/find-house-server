@@ -7,6 +7,11 @@ import config from "../../config";
 
 const loginEmailUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "email");
+  res.cookie("accessToken", result?.accessToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+  });
 
   const { refreshToken, accessToken, user }: any = result;
 
@@ -23,6 +28,11 @@ const loginEmailUser = catchAsync(async (req, res) => {
 });
 const loginFacebookUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "facebook");
+  res.cookie("accessToken", result?.accessToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+  });
 
   const { refreshToken, accessToken, user }: any = result;
   sendResponse(res, {
@@ -39,6 +49,11 @@ const loginFacebookUser = catchAsync(async (req, res) => {
 
 const loginTwitterUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "twitter");
+  res.cookie("accessToken", result?.accessToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+  });
 
   const { refreshToken, accessToken, user }: any = result;
   sendResponse(res, {
@@ -55,6 +70,11 @@ const loginTwitterUser = catchAsync(async (req, res) => {
 
 const registerByEmail = catchAsync(async (req, res) => {
   const result = await AuthServices.registerByEmail(req.body);
+  res.cookie("accessToken", result?.accessToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+  });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

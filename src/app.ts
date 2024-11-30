@@ -17,7 +17,11 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://wwwfind-house.vercel.app"],
+    origin: [
+      "http://localhost:3000",
+      "https://wwwfind-house.vercel.app",
+      "https://find-house-client.vercel.app",
+    ],
     credentials: true, // Required for cookies
   }),
 );

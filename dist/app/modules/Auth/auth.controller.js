@@ -18,15 +18,15 @@ const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const auth_service_1 = require("./auth.service");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
+const config_1 = __importDefault(require("../../config"));
 const loginEmailUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "email");
-    const { refreshToken, accessToken, user } = result;
-    res.cookie("accessToken", accessToken, {
+    res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
+        secure: config_1.default.NODE_ENV === "production",
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // Example: 7 days
+        sameSite: "lax",
     });
+    const { refreshToken, accessToken, user } = result;
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -40,13 +40,12 @@ const loginEmailUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 }));
 const loginFacebookUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "facebook");
-    const { refreshToken, accessToken, user } = result;
-    res.cookie("accessToken", accessToken, {
+    res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
+        secure: config_1.default.NODE_ENV === "production",
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // Example: 7 days
+        sameSite: "lax",
     });
+    const { refreshToken, accessToken, user } = result;
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -60,13 +59,12 @@ const loginFacebookUser = (0, catchAsync_1.default)((req, res) => __awaiter(void
 }));
 const loginTwitterUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "twitter");
-    const { refreshToken, accessToken, user } = result;
-    res.cookie("accessToken", accessToken, {
+    res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
+        secure: config_1.default.NODE_ENV === "production",
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // Example: 7 days
+        sameSite: "lax",
     });
+    const { refreshToken, accessToken, user } = result;
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -81,10 +79,9 @@ const loginTwitterUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 
 const registerByEmail = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.registerByEmail(req.body);
     res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
+        secure: config_1.default.NODE_ENV === "production",
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // Example: 7 days
+        sameSite: "lax",
     });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
