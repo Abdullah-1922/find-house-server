@@ -10,13 +10,6 @@ const loginEmailUser = catchAsync(async (req, res) => {
 
   const { refreshToken, accessToken, user }: any = result;
 
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none", // Required for cross-origin cookies
-    maxAge: 7 * 24 * 60 * 60 * 1000, // Example: 7 days
-  });
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -32,13 +25,6 @@ const loginFacebookUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "facebook");
 
   const { refreshToken, accessToken, user }: any = result;
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none", // Required for cross-origin cookies
-    maxAge: 7 * 24 * 60 * 60 * 1000, // Example: 7 days
-  });
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -55,13 +41,6 @@ const loginTwitterUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "twitter");
 
   const { refreshToken, accessToken, user }: any = result;
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none", // Required for cross-origin cookies
-    maxAge: 7 * 24 * 60 * 60 * 1000, // Example: 7 days
-  });
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -76,12 +55,6 @@ const loginTwitterUser = catchAsync(async (req, res) => {
 
 const registerByEmail = catchAsync(async (req, res) => {
   const result = await AuthServices.registerByEmail(req.body);
-  res.cookie("accessToken", result?.accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none", // Required for cross-origin cookies
-    maxAge: 7 * 24 * 60 * 60 * 1000, // Example: 7 days
-  });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -106,5 +106,5 @@ exports.PropertyPaymentService = {
     getPayments,
     getPaymentById,
     updatePaymentPayment,
-    getPaymentsForAgent
+    getPaymentsForAgent,
 };
