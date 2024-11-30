@@ -365,6 +365,28 @@ const getMyPaymentsData = async (
   };
 };
 
+const getAllPaymentsData = async (
+  query: Record<string, any>,
+  gatewayName: string,
+) => {
+  const paymentQueryBuilder = new QueryBuilder(
+    Payment.find({ gatewayName }).populate("customerId").populate("products"),
+    query,
+  )
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await paymentQueryBuilder.modelQuery;
+  const meta = await paymentQueryBuilder.countTotal();
+
+  return {
+    meta,
+    result,
+  };
+};
+
 const getAllPaymentsDatForAnalytics = async () => {
   const result = await Payment.find().populate("user");
 
@@ -378,4 +400,5 @@ export const PaymentService = {
   CasOnDeliveryStatusUpdate,
   getMyPaymentsData,
   getAllPaymentsDatForAnalytics,
+  getAllPaymentsData,
 };

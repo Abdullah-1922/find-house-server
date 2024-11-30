@@ -10,12 +10,6 @@ const loginEmailUser = catchAsync(async (req, res) => {
 
   const { refreshToken, accessToken, user }: any = result;
 
-  // res.cookie("accessToken", accessToken, {
-  //   secure: config.NODE_ENV === "production",
-  //   httpOnly: true,
-  //   sameSite: "lax",
-  // });
-
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -31,12 +25,6 @@ const loginFacebookUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "facebook");
 
   const { refreshToken, accessToken, user }: any = result;
-
-  // res.cookie("accessToken", accessToken, {
-  //   secure: config.NODE_ENV === "production",
-  //   httpOnly: true,
-  //   sameSite: "lax",
-  // });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -54,11 +42,6 @@ const loginTwitterUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "twitter");
 
   const { refreshToken, accessToken, user }: any = result;
-  // res.cookie("accessToken", accessToken, {
-  //   secure: config.NODE_ENV === "production",
-  //   httpOnly: true,
-  //   sameSite: "lax",
-  // });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -74,12 +57,6 @@ const loginTwitterUser = catchAsync(async (req, res) => {
 
 const registerByEmail = catchAsync(async (req, res) => {
   const result = await AuthServices.registerByEmail(req.body);
-
-  // res.cookie("accessToken", result?.accessToken, {
-  //   secure: config.NODE_ENV === "production",
-  //   httpOnly: true,
-  //   sameSite: "lax",
-  // });
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -104,7 +81,6 @@ const forgotPassword = catchAsync(async (req, res) => {
 // Reset Password
 const resetPassword = catchAsync(async (req, res) => {
   const token = req.headers.authorization;
-  console.log("token", token);
   const result = await AuthServices.resetPassword(req.body, token as string);
 
   sendResponse(res, {
@@ -118,8 +94,6 @@ const resetPassword = catchAsync(async (req, res) => {
 // change Password Controller
 const changePassword = catchAsync(async (req, res) => {
   const { token, currentPassword, newPassword } = req.body;
-
-  console.log(req.body);
 
   if (!token || !currentPassword || !newPassword) {
     throw new AppError(400, "All fields are required");

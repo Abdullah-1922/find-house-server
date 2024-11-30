@@ -18,9 +18,10 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://wwwfind-house.vercel.app"],
-    credentials: true,
+    credentials: true, // Required for cookies
   }),
 );
+
 // application routes
 app.use("/api/v2", router);
 

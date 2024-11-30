@@ -67,6 +67,21 @@ const getMyPaymentsData = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getAllPaymentsData = catchAsync(async (req, res) => {
+  const { gatewayName } = req.params;
+  const { result, meta } = await PaymentService.getAllPaymentsData(
+    req.query,
+    gatewayName,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Payment data retrieved successfully",
+    meta: meta,
+    data: result,
+  });
+});
 
 const getAllPaymentsDatForAnalytics = catchAsync(async (req, res) => {
   const result = await PaymentService.getAllPaymentsDatForAnalytics();
@@ -85,5 +100,6 @@ export const PaymentController = {
   paymentConformation,
   CasOnDeliveryStatusUpdate,
   getMyPaymentsData,
+  getAllPaymentsData,
   getAllPaymentsDatForAnalytics,
 };
