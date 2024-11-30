@@ -14,6 +14,10 @@ router.post(
 );
 
 router.get("/", PropertyPaymentController.getPayments);
+router.get(
+  "/agent/:userId",
+  PropertyPaymentController.getPaymentsForAgent,
+);
 router.get("/:id", PropertyPaymentController.getPaymentById);
 router.patch("/:id", PropertyPaymentController.updatePropertyPayment);
 
