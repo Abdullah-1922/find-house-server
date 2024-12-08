@@ -98,8 +98,28 @@ const getAgentStats = async (userId: string) => {
   return stats;
 };
 
+const filterStats =async()=>{
+  const maxPrice = await Property.find().sort({price:-1}).limit(1).select('price');
+  const minPrice = await Property.find().sort({price:1}).limit(1).select('price');
+  const maxArea = await Property.find().sort({area:-1}).limit(1).select('area');
+  const minArea = await Property.find().sort({area:1}).limit(1).select('area');
+  const cities= await Property.distinct('location.city');
+  const result=({
+    maxPrice:maxPrice[0].price,
+    minPrice:minPrice[0].price,
+    maxArea:maxArea[0].area,
+    minArea:minArea[0].area,
+    cities
+  });
+  return result;
+
+}
+
+
+
 export const StatsServices = {
   getAdminStats,
   getUserStats,
-  getAgentStats
+  getAgentStats,
+  filterStats
 };

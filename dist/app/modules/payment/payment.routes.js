@@ -16,6 +16,7 @@ router.post("/cash-on-delivery", (0, validateRequest_1.default)(payment_validati
 router.post("/cash-on-delivery/:userId", (0, validateRequest_1.default)(payment_validation_1.PaymentSchema), payment_controller_1.PaymentController.CasOnDeliveryStatusUpdate);
 router.post("/confirmation/:userId", payment_controller_1.PaymentController.paymentConformation);
 router.get("/:userId", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.user, user_utils_1.USER_ROLE.agent), payment_controller_1.PaymentController.getMyPaymentsData);
-router.get("/", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.user, user_utils_1.USER_ROLE.agent), payment_controller_1.PaymentController.getMyPaymentsData);
+router.get("/", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.user, user_utils_1.USER_ROLE.agent), payment_controller_1.PaymentController.getAllPayments);
+router.patch("/:id", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.user, user_utils_1.USER_ROLE.agent), payment_controller_1.PaymentController.updatePaymentStatus);
 router.get("/analytics", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.user, user_utils_1.USER_ROLE.agent), payment_controller_1.PaymentController.getMyPaymentsData);
 exports.PaymentRoutes = router;

@@ -21,6 +21,11 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const loginEmailUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "email");
     const { refreshToken, accessToken, user } = result;
+    // res.cookie("accessToken", accessToken, {
+    //   secure: config.NODE_ENV === "production",
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    // });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -35,6 +40,11 @@ const loginEmailUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 const loginFacebookUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "facebook");
     const { refreshToken, accessToken, user } = result;
+    // res.cookie("accessToken", accessToken, {
+    //   secure: config.NODE_ENV === "production",
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    // });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -49,6 +59,11 @@ const loginFacebookUser = (0, catchAsync_1.default)((req, res) => __awaiter(void
 const loginTwitterUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "twitter");
     const { refreshToken, accessToken, user } = result;
+    // res.cookie("accessToken", accessToken, {
+    //   secure: config.NODE_ENV === "production",
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    // });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -62,7 +77,11 @@ const loginTwitterUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 
 }));
 const registerByEmail = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.registerByEmail(req.body);
-    console.log(result);
+    // res.cookie("accessToken", result?.accessToken, {
+    //   secure: config.NODE_ENV === "production",
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    // });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

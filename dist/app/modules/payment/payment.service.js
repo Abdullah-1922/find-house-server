@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentService = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const user_model_1 = require("../User/user.model");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const http_status_1 = __importDefault(require("http-status"));
@@ -63,7 +64,7 @@ const cashOnDeliveryPayment = (payload) => __awaiter(void 0, void 0, void 0, fun
     console.log("payment result", result);
     return result;
 });
-const paymentConformationIntoDB = (transactionId, status, userId) => __awaiter(void 0, void 0, void 0, function* () {
+const paymentConformationIntoDB = (transactionId, status) => __awaiter(void 0, void 0, void 0, function* () {
     let paymentStatus = "failed";
     let message = "Payment Failed. Please try again.";
     const paymentData = yield payment_model_1.Payment.findOne({ transactionId });
@@ -236,7 +237,7 @@ const paymentConformationIntoDB = (transactionId, status, userId) => __awaiter(v
         <div class="details">
             ${details}
         </div>
-        <a href="http://localhost:3000/payment" class="${buttonClass}">${buttonText}</a>
+        <a href="https://wwwfind-house.vercel.app/payment" class="${buttonClass}">${buttonText}</a>
     </div>
 </body>
 </html>`;
@@ -299,6 +300,23 @@ const getAllPaymentsDatForAnalytics = () => __awaiter(void 0, void 0, void 0, fu
     const result = yield payment_model_1.Payment.find().populate("user");
     return result;
 });
+const getAllPayments = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const paymentQueryBuilder = new QueryBuilder_1.default(payment_model_1.Payment.find().populate("customerId").populate("products"), query)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    const result = yield paymentQueryBuilder.modelQuery;
+    const meta = yield paymentQueryBuilder.countTotal();
+    return {
+        meta,
+        result,
+    };
+});
+const updatePaymentStatus = (paymentId, status) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield payment_model_1.Payment.findByIdAndUpdate(paymentId, { status: status }, { new: true });
+    return result;
+});
 exports.PaymentService = {
     createPayment,
     cashOnDeliveryPayment,
@@ -306,4 +324,6 @@ exports.PaymentService = {
     CasOnDeliveryStatusUpdate,
     getMyPaymentsData,
     getAllPaymentsDatForAnalytics,
+    getAllPayments,
+    updatePaymentStatus
 };

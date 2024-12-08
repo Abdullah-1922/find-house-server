@@ -58,9 +58,20 @@ const updatePropertyPayment = (0, catchAsync_1.default)((req, res) => __awaiter(
         data: payment,
     });
 }));
+const getPaymentsForAgent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { payments, meta } = yield propertyPayment_service_1.PropertyPaymentService.getPaymentsForAgent(req.params.userId, req.query);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Payments retrieved successfully (Agent)",
+        data: payments,
+        meta: meta
+    });
+}));
 exports.PropertyPaymentController = {
     createPayment,
     getPayments,
     getPaymentById,
     updatePropertyPayment,
+    getPaymentsForAgent
 };
