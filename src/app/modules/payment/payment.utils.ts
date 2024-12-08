@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import config from "../../config";
 import { IPayment } from "./payment.interface";
+import AppError from "../../errors/AppError";
 
 export const initialPayment = async (paymentData: IPayment) => {
   const frontendUrl =
@@ -43,7 +45,7 @@ export const initialPayment = async (paymentData: IPayment) => {
     } else {
       console.error("Unexpected Error:", error.message);
     }
-    throw new Error("Failed to initiate payment");
+    throw new AppError(500,"Failed to initiate payment");
   }
 };
 
@@ -61,6 +63,6 @@ export const verifyPayment = async (transactionId: string) => {
     return response.data;
   } catch (error) {
     console.error("Error verifying payment:", error);
-    throw new Error("Failed to verify payment");
+    throw new AppError(500,"Failed to verify payment");
   }
 };
