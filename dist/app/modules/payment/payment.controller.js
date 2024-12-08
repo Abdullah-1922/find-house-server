@@ -61,6 +61,17 @@ const getMyPaymentsData = (0, catchAsync_1.default)((req, res) => __awaiter(void
         data: result,
     });
 }));
+const getAllPaymentsData = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { gatewayName } = req.params;
+    const { result, meta } = yield payment_service_1.PaymentService.getAllPaymentsData(req.query, gatewayName);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Payment data retrieved successfully",
+        meta: meta,
+        data: result,
+    });
+}));
 const getAllPaymentsDatForAnalytics = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield payment_service_1.PaymentService.getAllPaymentsDatForAnalytics();
     (0, sendResponse_1.default)(res, {
@@ -97,6 +108,7 @@ exports.PaymentController = {
     paymentConformation,
     CasOnDeliveryStatusUpdate,
     getMyPaymentsData,
+    getAllPaymentsData,
     getAllPaymentsDatForAnalytics,
     getAllPayments,
     updatePaymentStatus

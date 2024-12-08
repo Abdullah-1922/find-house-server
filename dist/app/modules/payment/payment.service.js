@@ -296,6 +296,19 @@ const getMyPaymentsData = (query, customerId) => __awaiter(void 0, void 0, void 
         result,
     };
 });
+const getAllPaymentsData = (query, gatewayName) => __awaiter(void 0, void 0, void 0, function* () {
+    const paymentQueryBuilder = new QueryBuilder_1.default(payment_model_1.Payment.find({ gatewayName }).populate("customerId").populate("products"), query)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    const result = yield paymentQueryBuilder.modelQuery;
+    const meta = yield paymentQueryBuilder.countTotal();
+    return {
+        meta,
+        result,
+    };
+});
 const getAllPaymentsDatForAnalytics = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield payment_model_1.Payment.find().populate("user");
     return result;
@@ -324,6 +337,7 @@ exports.PaymentService = {
     CasOnDeliveryStatusUpdate,
     getMyPaymentsData,
     getAllPaymentsDatForAnalytics,
+    getAllPaymentsData,
     getAllPayments,
-    updatePaymentStatus
+    updatePaymentStatus,
 };

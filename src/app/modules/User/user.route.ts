@@ -15,7 +15,7 @@ router.get("/role-based-user/:role", UserController.getRoleBasedUser);
 
 router.patch(
   "/update-role/:id/:role",
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE?.agent),
   UserController.updateRole,
 );
 

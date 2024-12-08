@@ -159,9 +159,9 @@ const paymentConformationIntoDB = async (
         <div>
             <span>Date:</span>
             <span>${format(
-        new Date(paymentData?.createdAt as Date),
-        "dd MMM, yyyy",
-      )}</span>
+              new Date(paymentData?.createdAt as Date),
+              "dd MMM, yyyy",
+            )}</span>
         </div>
       `
       : `
@@ -365,6 +365,27 @@ const getMyPaymentsData = async (
   };
 };
 
+const getAllPaymentsData = async (
+  query: Record<string, any>,
+  gatewayName: string,
+) => {
+  const paymentQueryBuilder = new QueryBuilder(
+    Payment.find({ gatewayName }).populate("customerId").populate("products"),
+    query,
+  )
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await paymentQueryBuilder.modelQuery;
+  const meta = await paymentQueryBuilder.countTotal();
+
+  return {
+    meta,
+    result,
+  };
+};
 
 const getAllPaymentsDatForAnalytics = async () => {
   const result = await Payment.find().populate("user");
@@ -372,9 +393,7 @@ const getAllPaymentsDatForAnalytics = async () => {
   return result;
 };
 
-const getAllPayments = async (
-  query: Record<string, any>,
-) => {
+const getAllPayments = async (query: Record<string, any>) => {
   const paymentQueryBuilder = new QueryBuilder(
     Payment.find().populate("customerId").populate("products"),
     query,
@@ -402,7 +421,6 @@ const updatePaymentStatus = async (paymentId: string, status: string) => {
   return result;
 };
 
-
 export const PaymentService = {
   createPayment,
   cashOnDeliveryPayment,
@@ -410,6 +428,7 @@ export const PaymentService = {
   CasOnDeliveryStatusUpdate,
   getMyPaymentsData,
   getAllPaymentsDatForAnalytics,
+  getAllPaymentsData,
   getAllPayments,
-  updatePaymentStatus
+  updatePaymentStatus,
 };

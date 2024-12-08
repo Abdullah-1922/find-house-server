@@ -56,5 +56,5 @@ exports.StatsController = {
     getAdminStats,
     getUserStats,
     getAgentStats,
-    filterStats
+    filterStats,
 };
