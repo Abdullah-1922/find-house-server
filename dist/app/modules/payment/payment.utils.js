@@ -13,8 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyPayment = exports.initialPayment = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const axios_1 = __importDefault(require("axios"));
 const config_1 = __importDefault(require("../../config"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const initialPayment = (paymentData) => __awaiter(void 0, void 0, void 0, function* () {
     const frontendUrl = config_1.default.NODE_ENV === "development"
         ? config_1.default.frontend_local_url
@@ -53,7 +55,7 @@ const initialPayment = (paymentData) => __awaiter(void 0, void 0, void 0, functi
         else {
             console.error("Unexpected Error:", error.message);
         }
-        throw new Error("Failed to initiate payment");
+        throw new AppError_1.default(500, "Failed to initiate payment");
     }
 });
 exports.initialPayment = initialPayment;
@@ -71,7 +73,7 @@ const verifyPayment = (transactionId) => __awaiter(void 0, void 0, void 0, funct
     }
     catch (error) {
         console.error("Error verifying payment:", error);
-        throw new Error("Failed to verify payment");
+        throw new AppError_1.default(500, "Failed to verify payment");
     }
 });
 exports.verifyPayment = verifyPayment;

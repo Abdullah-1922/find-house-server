@@ -19,6 +19,10 @@ const popularPlaceSchema = new mongoose.Schema({
       message: 'At least one image is required.',
     },
   },
+  isFeatured: {
+    type: Boolean,
+    default: false,
+  },
 }, { timestamps: true });
 
 export const PopularPlace = mongoose.model('PopularPlace', popularPlaceSchema);

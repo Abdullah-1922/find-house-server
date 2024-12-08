@@ -16,6 +16,7 @@ const payment_routes_1 = require("../modules/payment/payment.routes");
 const propertyPayment_router_1 = require("../modules/propertyPayment/propertyPayment.router");
 const newsLetter_route_1 = require("../modules/newsLetter/newsLetter.route");
 const popularPlaces_route_1 = require("../modules/popularPlaces/popularPlaces.route");
+const management_route_1 = require("../modules/management/management.route");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -66,6 +67,7 @@ const moduleRoutes = [
     { path: "/property-payment", route: propertyPayment_router_1.PropertyPaymentRoutes },
     { path: "/newsletter", route: newsLetter_route_1.NewsLetterRoutes },
     { path: "/popular-places", route: popularPlaces_route_1.popularPlacesRoutes },
+    { path: "/management", route: management_route_1.ManagementRoutes },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 exports.default = router;
