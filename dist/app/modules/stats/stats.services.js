@@ -103,8 +103,24 @@ const getAgentStats = (userId) => __awaiter(void 0, void 0, void 0, function* ()
     };
     return stats;
 });
+const filterStats = () => __awaiter(void 0, void 0, void 0, function* () {
+    const maxPrice = yield property_model_1.default.find().sort({ price: -1 }).limit(1).select('price');
+    const minPrice = yield property_model_1.default.find().sort({ price: 1 }).limit(1).select('price');
+    const maxArea = yield property_model_1.default.find().sort({ area: -1 }).limit(1).select('area');
+    const minArea = yield property_model_1.default.find().sort({ area: 1 }).limit(1).select('area');
+    const cities = yield property_model_1.default.distinct('location.city');
+    const result = ({
+        maxPrice: maxPrice[0].price,
+        minPrice: minPrice[0].price,
+        maxArea: maxArea[0].area,
+        minArea: minArea[0].area,
+        cities
+    });
+    return result;
+});
 exports.StatsServices = {
     getAdminStats,
     getUserStats,
-    getAgentStats
+    getAgentStats,
+    filterStats
 };

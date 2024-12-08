@@ -13,7 +13,6 @@ const getAdminStats = catchAsync(async (req, res) => {
   });
 });
 const getUserStats = catchAsync(async (req, res) => {
-  console.log(req.params.userId);
   const result = await StatsServices.getUserStats(req.params.userId);
 
   sendResponse(res, {
@@ -33,10 +32,20 @@ const getAgentStats = catchAsync(async (req, res) => {
     success: true,
   });
 });
+const filterStats = catchAsync(async (req, res) => {
+  const result = await StatsServices.filterStats();
 
+  sendResponse(res, {
+    data: result,
+    message: "Stats fetched successfully",
+    statusCode: 200,
+    success: true,
+  });
+});
 
 export const StatsController = {
   getAdminStats,
   getUserStats,
-  getAgentStats
+  getAgentStats,
+  filterStats,
 };

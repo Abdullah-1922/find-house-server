@@ -41,11 +41,27 @@ class QueryBuilder {
             "maxArea",
             "features",
             "location",
+            "bathrooms",
+            "bedrooms",
+            "age",
+            "status",
         ];
         excludeFields.forEach((field) => delete queryObj[field]);
         // Price range filter
         if (this.query.minPrice || this.query.maxPrice) {
             queryObj.price = Object.assign(Object.assign({}, (this.query.minPrice ? { $gte: Number(this.query.minPrice) } : {})), (this.query.maxPrice ? { $lte: Number(this.query.maxPrice) } : {}));
+        }
+        if (this.query.bathrooms) {
+            queryObj["extraInfo.bathrooms"] = Number(this.query.bathrooms);
+        }
+        if (this.query.bedrooms) {
+            queryObj.rooms = Number(this.query.bedrooms);
+        }
+        if (this.query.age) {
+            queryObj["extraInfo.age"] = this.query.age;
+        }
+        if (this.query.status) {
+            queryObj.status = this.query.status;
         }
         // Area range filter
         if (this.query.minArea || this.query.maxArea) {
@@ -88,8 +104,8 @@ class QueryBuilder {
         return this;
     }
     countTotal() {
-        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b;
             const totalQueries = this.modelQuery.getFilter();
             const total = yield this.modelQuery.model.countDocuments(totalQueries);
             const page = Number((_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.page) || 1;

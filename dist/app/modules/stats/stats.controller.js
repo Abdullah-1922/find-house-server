@@ -26,7 +26,6 @@ const getAdminStats = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     });
 }));
 const getUserStats = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.params.userId);
     const result = yield stats_services_1.StatsServices.getUserStats(req.params.userId);
     (0, sendResponse_1.default)(res, {
         data: result,
@@ -44,8 +43,18 @@ const getAgentStats = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         success: true,
     });
 }));
+const filterStats = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield stats_services_1.StatsServices.filterStats();
+    (0, sendResponse_1.default)(res, {
+        data: result,
+        message: "Stats fetched successfully",
+        statusCode: 200,
+        success: true,
+    });
+}));
 exports.StatsController = {
     getAdminStats,
     getUserStats,
-    getAgentStats
+    getAgentStats,
+    filterStats,
 };

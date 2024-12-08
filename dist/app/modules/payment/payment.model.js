@@ -5,7 +5,7 @@ const mongoose_1 = require("mongoose");
 const PaymentSchema = new mongoose_1.Schema({
     customerId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "User", // Reference to the User model
         required: true,
     },
     products: [

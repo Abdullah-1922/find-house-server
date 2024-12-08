@@ -33,6 +33,6 @@ exports.getSubscribers = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         success: true,
         message: "Subscribers retrieved successfully",
         data: subscribers,
-        meta: meta
+        meta: meta,
     });
 }));

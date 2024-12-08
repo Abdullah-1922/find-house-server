@@ -14,6 +14,7 @@ import { StatsRoutes } from "../modules/stats/stats.route";
 import { PaymentRoutes } from "../modules/payment/payment.routes";
 import { PropertyPaymentRoutes } from "../modules/propertyPayment/propertyPayment.router";
 import { NewsLetterRoutes } from "../modules/newsLetter/newsLetter.route";
+import { popularPlacesRoutes } from "../modules/popularPlaces/popularPlaces.route";
 
 type TModuleRoutes = {
   path: string;
@@ -70,6 +71,7 @@ const moduleRoutes: TModuleRoutes[] = [
   { path: "/payments", route: PaymentRoutes },
   { path: "/property-payment", route: PropertyPaymentRoutes },
   { path: "/newsletter", route: NewsLetterRoutes },
+  { path: "/popular-places", route: popularPlacesRoutes },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

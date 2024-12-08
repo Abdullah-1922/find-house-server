@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterQuery, Query } from "mongoose";
 
 class QueryBuilder<T> {
@@ -41,6 +42,10 @@ class QueryBuilder<T> {
       "maxArea",
       "features",
       "location",
+      "bathrooms",
+      "bedrooms",
+      "age",
+      "status",
     ];
     excludeFields.forEach((field) => delete queryObj[field]);
 
@@ -51,7 +56,18 @@ class QueryBuilder<T> {
         ...(this.query.maxPrice ? { $lte: Number(this.query.maxPrice) } : {}),
       };
     }
-
+    if (this.query.bathrooms) {
+      queryObj["extraInfo.bathrooms"] = Number(this.query.bathrooms);
+    }
+    if (this.query.bedrooms) {
+      queryObj.rooms = Number(this.query.bedrooms);
+    }
+    if (this.query.age) {
+      queryObj["extraInfo.age"] = this.query.age;
+    }
+    if (this.query.status) {
+      queryObj.status = this.query.status;
+    }
     // Area range filter
     if (this.query.minArea || this.query.maxArea) {
       queryObj.area = {
