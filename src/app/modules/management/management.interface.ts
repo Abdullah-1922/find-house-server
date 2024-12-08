@@ -3,6 +3,8 @@ export type TManagement = {
     title: string;
     description: string;
     video: string;
+    signatureImage: string;
+    btnLink: string;
   };
   faqPage?: {
     faq: {

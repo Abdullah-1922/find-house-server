@@ -6,6 +6,8 @@ const ManagementSchema = new Schema<TManagement>({
     title: { type: String, required: false },
     description: { type: String, required: false },
     video: { type: String, required: false },
+    signatureImage: { type: String, required: false },
+    btnLink: { type: String, required: false },
   },
   faqPage: {
     faq: [
