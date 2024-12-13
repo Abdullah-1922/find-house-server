@@ -24,6 +24,14 @@ const loginTwitterValidationSchema = zod_1.z.object({
         twitterId: zod_1.z.string(),
     }),
 });
+const loginGoogleValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        firstName: zod_1.z.string().optional(),
+        secondName: zod_1.z.string().optional(),
+        image: zod_1.z.string().optional(),
+        email: zod_1.z.string().email(),
+    }),
+});
 const refreshTokenValidationSchema = zod_1.z.object({
     cookies: zod_1.z.object({
         refreshToken: zod_1.z.string({
@@ -64,4 +72,5 @@ exports.AuthValidation = {
     loginFacebookValidationSchema,
     changePasswordValidationSchema,
     forgotPasswordValidationSchema,
+    loginGoogleValidationSchema
 };

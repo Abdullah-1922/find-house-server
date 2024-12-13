@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthServices = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const user_model_1 = require("../User/user.model");
 const auth_utils_1 = require("./auth.utils"); // Utility to create JWT
@@ -68,6 +69,21 @@ const loginUser = (payload, provider) => __awaiter(void 0, void 0, void 0, funct
         user = yield auth_model_1.default.findOne({ twitterId: payload.twitterId });
         if (!user)
             user = yield registerSocialUser(payload, "twitter");
+        const tokens = generateTokens(user);
+        return Object.assign(Object.assign({}, tokens), { user });
+    }
+    if (provider === "google") {
+        if (!payload.email)
+            throw new AppError_1.default(400, "Email is required");
+        user = yield auth_model_1.default.findOne({ email: payload.email });
+        if ((user === null || user === void 0 ? void 0 : user.email) === payload.email && user.provider !== "google") {
+            throw new AppError_1.default(400, "User already exists");
+        }
+        if (!user) {
+            const authData = yield auth_model_1.default.create(Object.assign(Object.assign({}, payload), { provider, email: payload.email }));
+            yield user_model_1.User.create(Object.assign(Object.assign({}, payload), { auth: authData._id }));
+            user = authData;
+        }
         const tokens = generateTokens(user);
         return Object.assign(Object.assign({}, tokens), { user });
     }

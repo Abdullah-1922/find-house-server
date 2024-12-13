@@ -21,7 +21,7 @@ const authSchema = new Schema<TAuth>(
     },
     provider: {
       type: String,
-      enum: ["email", "facebook", "twitter"],
+      enum: ["email", "facebook", "twitter", "google"],
       required: true,
     },
     facebookId: { type: String, unique: true, sparse: true },

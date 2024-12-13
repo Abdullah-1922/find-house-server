@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthControllers = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_1 = __importDefault(require("http-status"));
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
@@ -40,6 +41,25 @@ const loginEmailUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 }));
 const loginFacebookUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.loginUser(req.body, "facebook");
+    res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
+        secure: config_1.default.NODE_ENV === "production",
+        httpOnly: true,
+        sameSite: "lax",
+    });
+    const { refreshToken, accessToken, user } = result;
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User is logged in successfully!",
+        data: {
+            accessToken,
+            refreshToken,
+            user,
+        },
+    });
+}));
+const loginGoogleUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield auth_service_1.AuthServices.loginUser(req.body, "google");
     res.cookie("accessToken", result === null || result === void 0 ? void 0 : result.accessToken, {
         secure: config_1.default.NODE_ENV === "production",
         httpOnly: true,
@@ -132,4 +152,5 @@ exports.AuthControllers = {
     forgotPassword,
     resetPassword,
     changePassword,
+    loginGoogleUser
 };

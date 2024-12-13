@@ -4,6 +4,8 @@ const aboutPageSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   video: z.string().optional(),
+    signatureImage: z.string().optional(),
+    btnLink: z.string().optional(),
 }).optional();
 
 const faqSchema = z.object({

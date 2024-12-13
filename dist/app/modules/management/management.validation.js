@@ -6,6 +6,8 @@ const aboutPageSchema = zod_1.z.object({
     title: zod_1.z.string().optional(),
     description: zod_1.z.string().optional(),
     video: zod_1.z.string().optional(),
+    signatureImage: zod_1.z.string().optional(),
+    btnLink: zod_1.z.string().optional(),
 }).optional();
 const faqSchema = zod_1.z.object({
     question: zod_1.z.string(),

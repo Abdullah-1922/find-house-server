@@ -14,6 +14,7 @@ const router = express_1.default.Router();
 router.post("/login/email", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginEmailValidationSchema), auth_controller_1.AuthControllers.loginEmailUser);
 router.post("/login/facebook", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginFacebookValidationSchema), auth_controller_1.AuthControllers.loginFacebookUser);
 router.post("/login/twitter", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginTwitterValidationSchema), auth_controller_1.AuthControllers.loginTwitterUser);
+router.post("/login/google", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginGoogleValidationSchema), auth_controller_1.AuthControllers.loginGoogleUser);
 router.post("/signup/email", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.registerEmailUserValidationSchema), auth_controller_1.AuthControllers.registerByEmail);
 router.post("/forgot-password", (0, validateRequest_1.default)(auth_validation_1.AuthValidation.forgotPasswordValidationSchema), auth_controller_1.AuthControllers.forgotPassword);
 router.post("/reset-password", (0, auth_1.default)(user_utils_1.USER_ROLE.admin, user_utils_1.USER_ROLE.agent, user_utils_1.USER_ROLE.user), auth_controller_1.AuthControllers.resetPassword);

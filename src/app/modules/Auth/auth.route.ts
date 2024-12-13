@@ -22,6 +22,11 @@ router.post(
   validateRequest(AuthValidation.loginTwitterValidationSchema),
   AuthControllers.loginTwitterUser,
 );
+router.post(
+  "/login/google",
+  validateRequest(AuthValidation.loginGoogleValidationSchema),
+  AuthControllers.loginGoogleUser,
+);
 
 router.post(
   "/signup/email",

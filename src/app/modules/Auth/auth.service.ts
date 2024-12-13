@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import bcryptjs from "bcryptjs";
 import { User } from "../User/user.model";
 import { TAuth } from "./auth.interface";
@@ -79,6 +80,32 @@ const loginUser = async (payload: TAuth, provider?: string) => {
 
     user = await Auth.findOne({ twitterId: payload.twitterId });
     if (!user) user = await registerSocialUser(payload, "twitter");
+    const tokens = generateTokens(user);
+    return { ...tokens, user };
+  }
+  if (provider === "google") {
+    if (!payload.email) throw new AppError(400, "Email is required");
+     
+    user = await Auth.findOne({ email: payload.email });
+    if(user?.email === payload.email && user.provider !== "google") {
+      throw new AppError(400, "User already exists");
+    }
+
+    if (!user) {
+      const authData = await Auth.create({
+        ...payload,
+        provider,
+        email: payload.email,
+      });
+
+      await User.create({
+        ...payload,
+        auth: authData._id,
+      });
+
+      user = authData;
+    }
+
     const tokens = generateTokens(user);
     return { ...tokens, user };
   }

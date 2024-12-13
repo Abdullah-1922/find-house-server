@@ -22,6 +22,14 @@ const loginTwitterValidationSchema = z.object({
     twitterId: z.string(),
   }),
 });
+const loginGoogleValidationSchema = z.object({
+  body: z.object({
+    firstName: z.string().optional(),
+    secondName: z.string().optional(),
+    image: z.string().optional(),
+    email: z.string().email(),
+  }),
+});
 
 const refreshTokenValidationSchema = z.object({
   cookies: z.object({
@@ -67,4 +75,5 @@ export const AuthValidation = {
   loginFacebookValidationSchema,
   changePasswordValidationSchema,
   forgotPasswordValidationSchema,
+  loginGoogleValidationSchema
 };

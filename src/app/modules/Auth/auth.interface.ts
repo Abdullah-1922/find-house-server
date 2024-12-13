@@ -5,7 +5,7 @@ export type TAuth = {
   role: "user" | "admin"| "agent";
   email?: string;
   password?: string;
-  provider: "email" | "facebook" | "twitter";
+  provider: "email" | "facebook" | "twitter"| "google";
   twitterId: string;
   facebookId: string;
   createdAt?: Date;

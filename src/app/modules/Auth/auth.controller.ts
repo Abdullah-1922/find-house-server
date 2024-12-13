@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
@@ -28,6 +29,26 @@ const loginEmailUser = catchAsync(async (req, res) => {
 });
 const loginFacebookUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body, "facebook");
+  res.cookie("accessToken", result?.accessToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: "lax",
+  });
+
+  const { refreshToken, accessToken, user }: any = result;
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User is logged in successfully!",
+    data: {
+      accessToken,
+      refreshToken,
+      user,
+    },
+  });
+});
+const loginGoogleUser = catchAsync(async (req, res) => {
+  const result = await AuthServices.loginUser(req.body, "google");
   res.cookie("accessToken", result?.accessToken, {
     secure: config.NODE_ENV === "production",
     httpOnly: true,
@@ -138,4 +159,5 @@ export const AuthControllers = {
   forgotPassword,
   resetPassword,
   changePassword,
+  loginGoogleUser
 };
